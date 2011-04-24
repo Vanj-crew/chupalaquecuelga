@@ -37,7 +37,7 @@ const uint32 MaxVehNumWorldState[2] = {3681,3491};
 const uint32 ClockWorldState[2] = {3781,4354};
 const uint8 CapturePointArtKit[3] = {2, 1, 21};
 char const *fmtstring(char const *format, ...);
-const Team TeamId2Team[3] = {ALLIANCE, HORDE, TEAM_OTHER};
+const Team TeamId2TeamWG[3] = {ALLIANCE, HORDE, TEAM_OTHER};
 
 enum OutdoorPvPWGSpell
 {
@@ -206,7 +206,7 @@ struct BuildingState
     {
         team = t;
         if(graveTeam)
-            if (uint32 newTeam = TeamId2Team[t])
+            if (uint32 newTeam = TeamId2TeamWG[t])
                 *graveTeam = newTeam;
     }
 };
