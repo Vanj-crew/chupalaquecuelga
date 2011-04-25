@@ -522,3 +522,9 @@ INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equ
 (@GUID+13,32837,1,1,1,0,0,333.091,-4707.97,15.6644,4.12487,300,0,0,0,0,0,0,0,0,0), -- Noblegarden Merchant
 (@GUID+14,32837,530,1,1,0,0,9487.64,-6833.65,16.986,0.819677,300,0,0,0,0,0,0,0,0,0), -- Noblegarden Merchant
 (@GUID+15,32837,1,1,1,0,0,-2343.08,-364.618,-8.4062,5.82199,300,0,0,0,0,0,0,0,0,0); -- Noblegarden Merchant
+
+-- Fix Core Archi.
+UPDATE `creature_template` SET `ScriptName` = 'npc_spring_rabbit' WHERE `entry` = 32791; -- Fix Spring Fling achievement
+DELETE FROM `spell_script_names` WHERE `spell_id` = 61716; -- Fix Hard Boiled achievement
+INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
+('61716', 'spell_item_rabbitcostume');

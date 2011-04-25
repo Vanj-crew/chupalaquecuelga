@@ -2651,6 +2651,77 @@ public:
     }
 };
 
+enum eSpringRabbit
+{
+   NPC_SPRING_RABBIT           = 32791,
+   NPC_SPRING_RABBIT_BABBY     = 32793,
+   SPELL_SPRING_RABBIT_IN_LOVE = 61728,
+   SPELL_SPRING_RABBIT_JUMP    = 61724,
+   SPELL_SPRING_RABBIT_FLING   = 61875,
+};
+
+class npc_spring_rabbit : public CreatureScript
+{
+public:
+   npc_spring_rabbit() : CreatureScript("npc_spring_rabbit") { }
+
+   struct npc_spring_rabbitAI : public ScriptedAI
+   {
+       npc_spring_rabbitAI(Creature *c) : ScriptedAI(c) {Reset();}
+       bool m_bIsLove;
+       uint32 uiCheckTimer;
+
+       void Reset()
+       {
+           uiCheckTimer = 5000;
+           m_bIsLove = false;
+
+           if (Unit* own = me->GetOwner())
+               me->GetMotionMaster()->MoveFollow(own,0,0);
+       }
+
+       void UpdateAI(const uint32 diff)
+       {
+           if (uiCheckTimer <= diff)
+           {
+               if (!m_bIsLove)
+               {
+                   if (Creature* rabbit = me->FindNearestCreature(NPC_SPRING_RABBIT, 7, true))
+                   {
+                       if (rabbit->GetGUID() == me->GetGUID())
+                           return;
+                           
+                       if (!rabbit->HasAura(SPELL_SPRING_RABBIT_IN_LOVE))
+                       {
+                           me->CastSpell(me, SPELL_SPRING_RABBIT_IN_LOVE, true);
+                           rabbit->CastSpell(rabbit, SPELL_SPRING_RABBIT_IN_LOVE, true);
+
+                           if (Unit* owner = me->GetOwner())
+                               owner->CastSpell(owner, SPELL_SPRING_RABBIT_FLING, true);
+
+                           if (Unit* owner = rabbit->GetOwner())
+                               owner->CastSpell(owner, SPELL_SPRING_RABBIT_FLING, true);
+
+                           m_bIsLove = true;
+                       }
+                   }
+               }
+ 
+               DoCast(me, SPELL_SPRING_RABBIT_JUMP);
+
+               uiCheckTimer = urand(5000, 8000);
+           }
+           else
+               uiCheckTimer -= diff;
+       }
+   };
+
+   CreatureAI *GetAI(Creature *creature) const
+   {
+       return new npc_spring_rabbitAI(creature);
+   }
+};
+
 void AddSC_npcs_special()
 {
     new npc_air_force_bots;
@@ -2666,6 +2737,7 @@ void AddSC_npcs_special()
     new npc_rogue_trainer;
     new npc_sayge;
     new npc_steam_tonk;
+    new npc_spring_rabbit();
     new npc_tonk_mine;
     new npc_winter_reveler;
     new npc_brewfest_reveler;
