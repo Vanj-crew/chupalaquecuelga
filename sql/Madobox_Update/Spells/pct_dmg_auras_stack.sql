@@ -17,3 +17,9 @@ INSERT INTO `spell_group` VALUES
 
 DELETE FROM `spell_group_stack_rules` WHERE `group_id` = 2017;
 INSERT INTO `spell_group_stack_rules` VALUES (2017,1);
+DELETE FROM `spell_group` WHERE `spell_id` IN (57386,-2010);
+INSERT INTO `spell_group` VALUES (2010,57386),(1033,-2010);
+DELETE FROM `spell_group` WHERE `spell_id` IN (8042,-2009);
+INSERT INTO `spell_group` VALUES (2009,8042),(1064,-2009);
+DELETE FROM `spell_group` WHERE `spell_id` IN (67,-2008);
+INSERT INTO `spell_group` VALUES (2008,67),(1079,-2008);
