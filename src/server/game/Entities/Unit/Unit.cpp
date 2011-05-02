@@ -11633,7 +11633,8 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
             }
             else if (ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellProto()))
                 if (!HasUnitTypeMask(UNIT_MASK_GUARDIAN))
-                    AddPctN(DoneTotalMod, (*i)->GetAmount());
+                    if ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL)
+                       AddPctN(DoneTotalMod, (*i)->GetAmount());
         }
         // Creatures' melee
         else if ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL)
