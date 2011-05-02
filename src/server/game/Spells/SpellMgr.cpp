@@ -3926,6 +3926,10 @@ void SpellMgr::LoadSpellCustomAttr()
             spellInfo->EffectBasePoints[2] += 30000;
             count++;
             break;
+        case 61607: // Mark of Blood
+            spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
+            ++count;
+            break;
         case 62324: // Throw Passenger
             spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
             count++;
