@@ -921,6 +921,7 @@ void Creature::UpdateDamagePhysical(WeaponAttackType attType)
 ########                         ########
 #######################################*/
 
+#define ENTRY_INFERNAL          89
 #define ENTRY_IMP               416
 #define ENTRY_VOIDWALKER        1860
 #define ENTRY_SUCCUBUS          1863
@@ -1192,6 +1193,14 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
                 frost = 0;
             SetBonusDamage(int32(frost * 0.4f));
         }
+        else if (GetEntry() == ENTRY_INFERNAL)
+        {
+            int32 fire  = int32(owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE)) - owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_FIRE);
+            if (fire < 0)
+                fire = 0;
+            SetBonusDamage(int32(fire * 0.15f));
+            bonusAP = fire * 0.57f;
+        }
         else if (GetEntry() == ENTRY_FERAL_SPIRIT)
         {
             float dmg_multiplier = 0.3f;
@@ -1200,6 +1209,8 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
             bonusAP = m_owner->GetTotalAttackPowerValue(BASE_ATTACK) * dmg_multiplier;
         }
     }
+
+
 
     SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, val + bonusAP);
 
