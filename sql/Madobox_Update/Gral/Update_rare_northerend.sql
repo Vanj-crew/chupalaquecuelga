@@ -1,3 +1,4 @@
+-- Update_rare_northerend.sql
 -- Eishorn
 UPDATE `creature_template` SET `faction_A`=16, `faction_H`=16 WHERE `entry`=32361;
 -- Aotona
