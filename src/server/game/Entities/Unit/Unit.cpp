@@ -4755,6 +4755,9 @@ void Unit::ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVic
      // Not much to do if no flags are set.
     if (procAttacker)
         ProcDamageAndSpellFor(false, pVictim, procAttacker, procExtra,attType, procSpell, amount, procAura);
+    // There exists some auras that applied at owner but should proc from pet abilities 
+    if (isGuardian() && procSpell && GetOwner() && GetOwner()->GetTypeId() == TYPEID_PLAYER)
+        GetOwner()->ProcDamageAndSpellFor(false, pVictim, procAttacker, procExtra, attType, procSpell, amount, procAura);
     // Now go on with a victim's events'n'auras
     // Not much to do if no flags are set or there is no victim
     if (pVictim && pVictim->isAlive() && procVictim)
@@ -5916,6 +5919,12 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
             }
             switch (dummySpell->Id)
             {
+                // Glyph of Succubus
+                case 56250:
+                    target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0, target->GetAura(32409)); // SW:D shall not be removed.
+                    target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
+                    target->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH);
+                    return true;
                 // Siphon Life
                 case 63108:
                 {
