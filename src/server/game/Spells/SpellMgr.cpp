@@ -3689,6 +3689,11 @@ void SpellMgr::LoadSpellCustomAttr()
             spellInfo->MaxAffectedTargets = 1;
             count++;
             break;
+        case 57994: // Wind Shear
+            // this required because with 0 bp it isn't handled in SpellEffects
+            spellInfo->EffectBasePoints[1] = 1;
+            ++count;
+            break;
         // Bloodlust
         case 2825:
             spellInfo->excludeCasterAuraSpell = 57724; // Sated
