@@ -575,3 +575,20 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId` = 15 AND `SourceGroup` = @Brann;
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
 (15,@Brann,0,0,9,@Quest,0,0,0,'', 'show gossip menu option if player has quest 12920');
+
+
+-- [Quest]12243.sql
+-- Fix for Quest 12243 Fire on the Water
+DELETE FROM `spell_linked_spell` WHERE `spell_trigger` = 48455;
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `comment`) VALUES (48455, 50290, 'Apothecary\'s Burning Water');
+UPDATE `creature_template` SET `lootid`=27232 WHERE `entry`=27232 LIMIT 1;
+DELETE FROM `creature_loot_template` WHERE `entry` =27232;
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`)
+VALUES
+(27232, 45912, 0.1, 1, 0, 1, 1),
+(27232, 37304, -100, 1, 0, 1, 1),
+(27232, 43851, 27, 1, 0, 1, 1),
+(27232, 33470, 14, 1, 0, 1, 3),
+(27232, 33443, 4, 1, 0, 1, 1),
+(27232, 22829, 2, 1, 0, 1, 1),
+(27232, 33444, 2, 1, 0, 1, 1);
