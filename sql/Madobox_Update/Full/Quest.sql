@@ -592,3 +592,8 @@ VALUES
 (27232, 33443, 4, 1, 0, 1, 1),
 (27232, 22829, 2, 1, 0, 1, 1),
 (27232, 33444, 2, 1, 0, 1, 1);
+
+-- [Quest]12066.sql
+-- Fix for Quest 12066 The Focus on the Beach
+DELETE FROM `spell_linked_spell` WHERE `spell_trigger` = 47374; 
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `comment`) VALUES (47374, 47391, 'Ley Line Information');
