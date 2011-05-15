@@ -494,6 +494,7 @@ void AddSC_boss_valithria();
 void AddSC_boss_lichking();
 void AddSC_instance_icecrown_citadel();
 void AddSC_icecrown_citadel();
+void AddSC_boss_gunship_battle();
 
 void AddSC_dalaran();
 void AddSC_borean_tundra();
@@ -1202,6 +1203,7 @@ void AddNorthrendScripts()
     AddSC_boss_lichking();
     AddSC_instance_icecrown_citadel();
     AddSC_icecrown_citadel();
+    AddSC_boss_gunship_battle();
 
     AddSC_dalaran();
     AddSC_borean_tundra();
