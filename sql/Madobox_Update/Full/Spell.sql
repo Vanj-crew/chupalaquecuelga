@@ -388,6 +388,7 @@ DELETE FROM `spell_dbc` WHERE `id` = 49221;
 INSERT INTO `spell_dbc` (`id`, `CastingTimeIndex`, `DurationIndex`, `RangeIndex`, `Effect1`, `EffectImplicitTargetA1`, `EffectApplyAuraName1`, `SpellFamilyName`, `Comment`) VALUES 
 (49221, 1, 1, 1, 6, 1, 4, 15, 'Bone Shield cooldown helper');
 
-
+-- 2011_05_13_00_world_spell_dbc.sql
+UPDATE `spell_dbc` SET `Id` = 100001 WHERE `Id` = 200000;
 
 
