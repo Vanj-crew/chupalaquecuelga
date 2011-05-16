@@ -1098,7 +1098,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         uiEncounter[DATA_DEATHWHISPER_EVENT] = data;
                         break;
                     }
-                    /*case DATA_GUNSHIP_BATTLE_EVENT:
+                    case DATA_GUNSHIP_BATTLE_EVENT:
                         switch(data)
                         {
                             case DONE:
@@ -1107,7 +1107,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                                 break;
                         }
                         uiEncounter[DATA_GUNSHIP_BATTLE_EVENT] = data;
-                        break;*/
+                        break;
                     case DATA_SAURFANG_EVENT:
                     {
                         //Preload the area around the Upper Spire teleport
