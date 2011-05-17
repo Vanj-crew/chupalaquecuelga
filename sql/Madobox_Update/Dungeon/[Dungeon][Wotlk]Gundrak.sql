@@ -3,7 +3,7 @@ UPDATE `creature_template` set `faction_A` = '7', `faction_H` = '7' WHERE `entry
 DELETE FROM `creature` WHERE `id` = '29932';
 INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) values ('29932','604','2','1','26644','0','1640.008423','931.781738','107.357620','0.668432','86400','0','0','431392','0','0','0');
 UPDATE `creature` set `spawnMask` = '0' WHERE `guid` in ('127071','127072','127073','127074','127075');
-DELETE FROM `creature_linked_respawn` WHERE `guid` in ('127071','127072','127073','127074','127075');
+-- DELETE FROM `creature_linked_respawn` WHERE `guid` in ('127071','127072','127073','127074','127075');
 UPDATE `creature_template` set `ScriptName` = 'mob_rhino_spirit' WHERE `entry` = '29791';
 UPDATE `creature_template` set `VehicleId` = '169' WHERE `entry` in ('29306','31368');
 DELETE FROM `spell_linked_spell` WHERE `spell_trigger` = '55814';
