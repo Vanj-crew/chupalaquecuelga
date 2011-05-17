@@ -484,7 +484,7 @@ INSERT INTO `areatrigger_teleport` VALUES
 -- [Quest][12652].sql
 -- DB/Quest Fix Quest 12652 Availability for Horde
 -- Quest 12652 Feedin' Da Goolz
-UPDATE `quest_template` SET `RequiredRaces = 0` WHERE `entry` = '12652';
+UPDATE `quest_template` SET `RequiredRaces` = 0 WHERE `entry` = '12652';
 
 -- [Quest][12998].sql
 -- QUEST 12998 "The Heart of the Storm"
