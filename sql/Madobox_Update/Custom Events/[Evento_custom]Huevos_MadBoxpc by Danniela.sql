@@ -8,7 +8,7 @@ SET @EventID     := 70;
 -- Game Event
 DELETE FROM `game_event` WHERE `eventEntry` IN (70,71); -- Clean up para los eventos anteriores (threat of azeroth)
 INSERT INTO `game_event` (`eventEntry`, `start_time`, `end_time`, `occurence`, `length`, `holiday`, `description`, `world_event`) VALUES
-('70','2010-09-20 02:01:00','02020-12-31 02:00:00','525600','20160','372','La búsqueda de los huevitos perdidos','0');
+('70','2010-09-20 02:01:00','02020-12-31 02:00:00','525600','20160','372','La busqueda de los huevitos perdidos','0');
 -- huevos Objects
 DELETE FROM `gameobject_template` WHERE `entry` = 600000;
 insert into `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `faction`, `flags`, `size`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `AIName`, `ScriptName`, `WDBVerified`) values
