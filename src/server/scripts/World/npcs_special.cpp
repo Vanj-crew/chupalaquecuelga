@@ -2722,6 +2722,92 @@ public:
    }
 };
 
+// Npc Risen Ally
+// Dummy Efecto
+// UPDATE `creature_template` SET `spell1` = 62225, `spell2` = 47480, `spell3` = 47481, `spell4` = 47482, `spell5` = 47484, `spell6` = 51874, `ScriptName` = 'npc_risen_ally' WHERE `entry` = 30230; 
+
+class npc_risen_ally : public CreatureScript
+{
+public:
+   npc_risen_ally() : CreatureScript("npc_risen_ally") { }
+
+   struct npc_risen_allyAI : public ScriptedAI
+   {
+       npc_risen_allyAI(Creature* pCreature) : ScriptedAI(pCreature) { }
+
+       uint32 StartTimer;
+       uint64 PlayerGuid;
+
+       void Reset()
+       {
+           StartTimer = 2000;
+           me->SetSheath(SHEATH_STATE_MELEE);
+           me->SetByteFlag(UNIT_FIELD_BYTES_2, 2, UNIT_CAN_BE_ABANDONED);
+           me->SetUInt32Value(UNIT_FIELD_BYTES_0, 2048);
+           me->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
+           me->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
+           me->SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
+
+
+           if (Player* creator = me->GetPlayer(*me, PlayerGuid))
+           //PlayerGuid = me->GetCreatorGUID();
+           //if (Player *creator = me->GetMap()->GetPlayer(me->GetcreatorGuid()))
+          {
+              me->SetLevel(creator->getLevel());
+              me->setFaction(creator->getFaction());
+           }
+       }
+
+       void JustDied(Unit* killer)
+       {
+           if (!me)
+               return;
+
+           if (Player* creator = me->GetPlayer(*me, PlayerGuid))
+           //if (Player* creator = me->GetMap()->GetPlayer(me->GetCreatorGuid()))
+           {
+               creator->RemoveAurasDueToSpell(46619);
+               creator->RemoveAurasDueToSpell(62218);
+           }
+       }
+
+       void AttackStart(Unit* pWho)
+       {
+           if (!pWho) 
+               return;
+
+           if (me->Attack(pWho, true))
+           {
+               me->SetInCombatWith(pWho);
+               pWho->SetInCombatWith(me);
+               DoStartMovement(pWho, 10.0f);
+               SetCombatMovement(true);
+           }
+       }
+
+       void UpdateAI(const uint32 uiDiff)
+       {
+           if(StartTimer > uiDiff)
+           {
+               StartTimer -= uiDiff;
+               return;
+           }
+
+           if(!me->isCharmed())
+               me->ForcedDespawn();
+
+           if (me->isInCombat())
+               DoMeleeAttackIfReady();
+       }
+   };
+
+   CreatureAI *GetAI(Creature *creature) const
+   {
+       return new npc_risen_allyAI(creature);
+   }
+};
+
+
 void AddSC_npcs_special()
 {
     new npc_air_force_bots;
@@ -2753,5 +2839,6 @@ void AddSC_npcs_special()
     new npc_locksmith;
     new npc_tabard_vendor;
     new npc_experience;
+    new npc_risen_ally;
 }
 
