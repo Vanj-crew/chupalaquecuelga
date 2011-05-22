@@ -1433,7 +1433,6 @@ void OutdoorPvPWG::UpdateClockDigit(uint32 &timer, uint32 digit, uint32 mod)
     {
         m_clock[digit] = value;
         SendUpdateWorldState(ClockWorldState[digit], uint32(timer + time(NULL)));
-        sWorld->SetWintergrapsTimer(uint32(timer + time(NULL)), digit);
     }
 }
 
@@ -1818,15 +1817,10 @@ void OutdoorPvPWG::EndBattle()
                     else
                         marks = 1;
                 }
-                else
+                else if (plr->HasAura(SPELL_LIEUTENANT) || plr->HasAura(SPELL_CORPORAL))
                 {
-                    if (plr->HasAura(SPELL_LIEUTENANT) || plr->HasAura(SPELL_CORPORAL))
-                    {
-                        marks = 1;
-                        honor = baseHonor;
-                    }
-                    else
-                        marks = 0;
+                    marks = 1;
+                    honor = baseHonor;
                 }
                 plr->RewardHonor(NULL, 1, honor);
                 RewardMarkOfHonor(plr, marks);
@@ -1848,13 +1842,10 @@ void OutdoorPvPWG::EndBattle()
                         plr->CastSpell(plr, SPELL_DESTROYED_TOWER, true);
                 }
             }
-            if (team == getDefenderTeam())
+            if (team == getDefenderTeam() && (plr->HasAura(SPELL_LIEUTENANT) || plr->HasAura(SPELL_CORPORAL)))
             {
-                if (plr->HasAura(SPELL_LIEUTENANT) || plr->HasAura(SPELL_CORPORAL))
-                {
-                    plr->AreaExploredOrEventHappens(A_VICTORY_IN_WG);
-                    plr->AreaExploredOrEventHappens(H_VICTORY_IN_WG);
-                }
+                plr->AreaExploredOrEventHappens(A_VICTORY_IN_WG);
+                plr->AreaExploredOrEventHappens(H_VICTORY_IN_WG);
             }
             plr->RemoveAurasDueToSpell(SPELL_RECRUIT);
             plr->RemoveAurasDueToSpell(SPELL_CORPORAL);
