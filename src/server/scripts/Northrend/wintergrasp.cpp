@@ -151,7 +151,7 @@ public:
            if (OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197))
            {
                // Get playerlist if there is.
-               if (pvpWG->isWarTime() && Check == true)
+               if (pvpWG->isWarTime() && Check)
                {
                    Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
                    for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
@@ -179,11 +179,11 @@ public:
                    }
                }
 
-               if (pvpWG->m_changeAlly != true) // If wg is switching (.wg switch)
+               if (!pvpWG->m_changeAlly) // If wg is switching (.wg switch)
                {
                    if (pvpWG->isWarTime())
                    {
-                       if (Player == true) //(false) If there isn't any player, then, don't cast the portal spell. Just summon gameobject.
+                       if (Player) //(false) If there isn't any player, then, don't cast the portal spell. Just summon gameobject.
                        {
                            if (uiPortalTimer <= diff)
                            {
@@ -215,7 +215,7 @@ public:
                        }
                        else
                        {
-                           if (Check2 == true) // If the portal isn't exist
+                           if (Check2) // If the portal isn't exist
                            {
                                WintergraspPortal = me->SummonGameObject(GO_WINTERGRASP_PORTAL, 5686.974609f, 773.303711f, 647.753235f, 5.572729f, 0, 0, 0.324484f, -0.945891f, 0);
                                Check2 = false;
@@ -312,7 +312,7 @@ public:
            if (OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197))
            {
                // Get playerlist if there is.
-               if (pvpWG->isWarTime() && Check == true)
+               if (pvpWG->isWarTime() && Check)
                {
                    Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
                    for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
@@ -340,11 +340,11 @@ public:
                    }
                }
 
-               if (pvpWG->m_changeHorde != true) // If wg is switching (.wg switch)
+               if (!pvpWG->m_changeHorde) // If wg is switching (.wg switch)
                {
                    if (pvpWG->isWarTime())
                    {
-                       if (Player == true) //(false) If there isn't any player, then, don't cast the portal spell. Just summon gameobject.
+                       if (Player) //(false) If there isn't any player, then, don't cast the portal spell. Just summon gameobject.
                        {
                            if (uiPortalTimer <= diff)
                            {
@@ -375,7 +375,7 @@ public:
                        }
                        else
                        {
-                           if (Check2 == true) // If the portal isn't exist
+                           if (Check2) // If the portal isn't exist
                            {
                                WintergraspPortal = me->SummonGameObject(GO_WINTERGRASP_PORTAL, 5686.974609f, 773.303711f, 647.753235f, 5.572729f, 0, 0, 0.324484f, -0.945891f, 0);
                                Check2 = false;
