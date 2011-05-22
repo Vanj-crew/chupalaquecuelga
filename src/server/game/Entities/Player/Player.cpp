@@ -55,7 +55,6 @@
 #include "BattlegroundMgr.h"
 #include "OutdoorPvP.h"
 #include "OutdoorPvPMgr.h"
-#include "OutdoorPvPWG.h"
 #include "ArenaTeam.h"
 #include "Chat.h"
 #include "Spell.h"
@@ -9070,11 +9069,6 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
     else
         data << uint32(0xEC5) << sWorld->GetWintergrapsTimer();
     // ---
-
-    // Init WG worldstates at login in other zone
-    if (GetSession()->PlayerLoading() && zoneid != 4197)
-        if (OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197))
-            pvpWG->SendInitWorldStatesTo(this);
 
     if (mapid == 530)                                       // Outland
     {

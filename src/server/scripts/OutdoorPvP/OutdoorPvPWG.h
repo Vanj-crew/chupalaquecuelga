@@ -58,7 +58,7 @@ enum OutdoorPvPWGSpell
     SPELL_DAMAGED_BUILDING                       = 59201,
     SPELL_INTACT_BUILDING                        = 59203,
 
-    SPELL_TELEPORT_ALLIENCE_CAMP                 = 58632,
+    SPELL_TELEPORT_ALLIANCE_CAMP                 = 58632,
     SPELL_TELEPORT_HORDE_CAMP                    = 58633,
     SPELL_TELEPORT_FORTRESS                      = 59096,
 
