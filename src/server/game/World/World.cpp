@@ -2841,18 +2841,16 @@ void World::SendWintergraspState()
    {
        if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
            continue;
+       
+       if (pvpWG->isWarTime()) // "Battle in progress"
+           itr->second->GetPlayer()->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
 
-           if (pvpWG->isWarTime())
-           {
-               // "Battle in progress"
-               itr->second->GetPlayer()->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
-           } else
-               // Time to next battle
-           {
-               pvpWG->SendInitWorldStatesTo(itr->second->GetPlayer());
-               itr->second->GetPlayer()->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL) + pvpWG->GetTimer()));
-               // Hide unneeded info which in center of screen
-               itr->second->GetPlayer()->SendInitWorldStates(itr->second->GetPlayer()->GetZoneId(), itr->second->GetPlayer()->GetAreaId());
-           }
+       else // Time to next battle
+       {
+           pvpWG->SendInitWorldStatesTo(itr->second->GetPlayer());
+           itr->second->GetPlayer()->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL) + pvpWG->GetTimer()));
+           // Hide unneeded info which in center of screen
+           itr->second->GetPlayer()->SendInitWorldStates(itr->second->GetPlayer()->GetZoneId(), itr->second->GetPlayer()->GetAreaId());
+       }
    }
-}
+

@@ -9065,11 +9065,16 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
     data << uint32(0xF3D) << uint32(sWorld->getIntConfig(CONFIG_ARENA_SEASON_ID));
 
     // May be send timer to start Wintergrasp
-    if(sWorld->GetWintergrapsState()==4354)
+    if (sWorld->GetWintergrapsState() == 1)
         data << uint32(0x1102) << sWorld->GetWintergrapsTimer();
     else
         data << uint32(0xEC5) << sWorld->GetWintergrapsTimer();
     // ---
+
+    // Init WG worldstates at login in other zone
+    if (GetSession()->PlayerLoading() && zoneid != 4197)
+        if (OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197))
+            pvpWG->SendInitWorldStatesTo(this);
 
     if (mapid == 530)                                       // Outland
     {
