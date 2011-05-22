@@ -369,6 +369,8 @@ INSERT INTO `creature` VALUES
 ('','28366','571','1','1','0','0','5163.06','2959.52','439.846','1.47258','600','0','0','50000','0','0','0','0','0','0');
 -- Cannons faction
 UPDATE `creature_template` SET `faction_A` = 1732,`faction_H` = 1801 WHERE `entry` = 28366;
+-- Fix torretas Wintergrasp
+UPDATE creature_template SET speed_walk = 0, speed_run = 0, spell1 = 51421 WHERE entry = 28366;
 
 -- revert npcs invisibles
 -- Horde
