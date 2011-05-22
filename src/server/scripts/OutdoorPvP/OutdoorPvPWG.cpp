@@ -2002,11 +2002,8 @@ void OutdoorPvPWG::RemovePlayerFromResurrectQueue(uint64 player_guid)
             {
                 (itr->second).erase(itr2);
 
-                Player *plr = sObjectMgr->GetPlayer(player_guid);
-                if (!plr)
-                    return;
-
-                plr->RemoveAurasDueToSpell(SPELL_WAITING_FOR_RESURRECT);
+                if (Player *plr = sObjectMgr->GetPlayer(player_guid))
+                    plr->RemoveAurasDueToSpell(SPELL_WAITING_FOR_RESURRECT);
 
                 return;
             }
