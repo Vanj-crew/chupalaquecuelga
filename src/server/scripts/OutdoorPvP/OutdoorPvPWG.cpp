@@ -1218,7 +1218,7 @@ void OutdoorPvPWG::HandlePlayerEnterZone(Player * plr, uint32 zone)
         }
         if (plr->getLevel() > 74)
         {
-            if (!plr->HasAura(SPELL_RECRUIT) && !plr->HasAura(SPELL_CORPORAL) && !plr->HasAura(SPELL_LIEUTENANT)))
+            if (!plr->HasAura(SPELL_RECRUIT) && !plr->HasAura(SPELL_CORPORAL) && !plr->HasAura(SPELL_LIEUTENANT))
                 plr->CastSpell(plr, SPELL_RECRUIT, true);
 
             if (plr->GetTeamId() == getAttackerTeam())
