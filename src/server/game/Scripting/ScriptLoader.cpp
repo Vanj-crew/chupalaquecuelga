@@ -63,6 +63,7 @@ void AddSC_wp_commandscript();
 
 //Custom
 void AddSC_Reset();
+void AddSC_npc_gurubashi_theme();
 
 #ifdef SCRIPTS
 //world
@@ -1252,6 +1253,7 @@ void AddCustomScripts()
     /* This is where custom scripts should be added. */
 
     AddSC_Reset();
+    AddSC_npc_gurubashi_theme();
 
 #endif
 }
