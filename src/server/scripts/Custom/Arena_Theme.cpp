@@ -114,7 +114,7 @@ public:
             else
             {     
                 OnGossipHello(player, _creature); 
-                _creature->MonsterSay("Tema bylo uspesne zvoleno. Prosim cekejte...", LANG_UNIVERSAL, player->GetGUID());    
+                _creature->MonsterSay("Theme already selected. Please wait.", LANG_UNIVERSAL, player->GetGUID());    
             }     
         }      
         else   
