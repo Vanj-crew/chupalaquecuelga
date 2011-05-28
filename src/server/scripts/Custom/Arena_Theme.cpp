@@ -49,8 +49,8 @@ public:
         else
         {
             int iTimeRem = iTimeLast - time(0);
-            if (iTimeRem >= 60)
-                sprintf(msg, "Next change possible in less than minute", iTimeRem / 60, iTimeRem - ((iTimeRem / 60) * 60));            
+            if (iTimeRem >= 2)
+                sprintf(msg, "Next change possible in less than minute", iTimeRem / 2, iTimeRem - ((iTimeRem / 2) * 2));            
             else
                 sprintf(msg, "Next change possible in %u minute/s.", iTimeRem);            
             player->ADD_GOSSIP_ITEM(0, msg, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);  
