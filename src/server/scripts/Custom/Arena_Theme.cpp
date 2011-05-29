@@ -399,7 +399,7 @@ public:
                             // Check Team ID de Player's GUID
                             switch (TeamMemberGUID)
                             {
-                                case 9566: 
+                                /*case 9566: 
                                 case 41452: 
                                 case 15562: 
                                 case 60162:
@@ -493,7 +493,14 @@ public:
                                 case 68377: 
                                 case 72310:
                                     TeamID = -1500016; 
-                                    break;
+                                    break;*/
+                                // Solo para testear
+                                case 2: 
+                                    TeamID = -1500015; 
+                                    break;*/
+                                case 10: 
+                                    TeamID = -1500016; 
+                                    break;*/
                                 default:
                                     TeamID = -1500000; 
                                     break;
