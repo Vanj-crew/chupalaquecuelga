@@ -93,6 +93,8 @@ class boss_zarithrian : public CreatureScript
                 instance->SetBossState(DATA_ZARITHRIAN, IN_PROGRESS);
                 DoScriptText(SAY_AGGRO, me);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
             void KilledUnit(Unit* /*victim*/)
