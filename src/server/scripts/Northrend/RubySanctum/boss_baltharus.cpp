@@ -26,15 +26,15 @@ enum eScriptTexts
     SAY_DEATH           = -1752004,
     SAY_SUMMON_CLONE    = -1752005,
 
-    SAY_XERESTRASZA_1  = -1752008,
-    SAY_XERESTRASZA_2  = -1752009,
-    SAY_XERESTRASZA_3  = -1752010,
-    SAY_XERESTRASZA_4  = -1752011,
-    SAY_XERESTRASZA_5  = -1752012,
-    SAY_XERESTRASZA_6  = -1752013,
-    SAY_XERESTRASZA_7  = -1752014,
-    SAY_XERESTRASZA_8  = -1752015,
-    SAY_XERESTRASZA_9  = -1752016
+    SAY_XERESTRASZA_1   = -1752008,
+    SAY_XERESTRASZA_2   = -1752009,
+    SAY_XERESTRASZA_3   = -1752010,
+    SAY_XERESTRASZA_4   = -1752011,
+    SAY_XERESTRASZA_5   = -1752012,
+    SAY_XERESTRASZA_6   = -1752013,
+    SAY_XERESTRASZA_7   = -1752014,
+    SAY_XERESTRASZA_8   = -1752015,
+    SAY_XERESTRASZA_9   = -1752016
 };
 
 enum eSpells
@@ -74,6 +74,14 @@ enum ePhases
 
     PHASE_1_MASK  = 1 << PHASE_1,
     PHASE_2_MASK  = 1 << PHASE_2
+};
+
+enum Equipment
+{
+    EQUIP_MAIN      = 49888,
+    EQUIP_OFFHAND   = EQUIP_NO_CHANGE,
+    EQUIP_RANGED    = EQUIP_NO_CHANGE,
+    EQUIP_DONE      = EQUIP_NO_CHANGE,
 };
 
 Creature* pXerestrasza;
@@ -198,6 +206,7 @@ class boss_baltharus : public CreatureScript
             {
                 instance->SetBossState(DATA_BALTHARUS, IN_PROGRESS);
                 DoScriptText(SAY_AGGRO, me);
+                SetEquipmentSlots(false, EQUIP_MAIN, EQUIP_OFFHAND, EQUIP_RANGED);
             }
 
             void JustSummoned(Creature *summon)

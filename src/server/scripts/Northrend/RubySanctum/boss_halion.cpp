@@ -327,10 +327,15 @@ class boss_halion : public CreatureScript
             {
                 instance->SetData(DATA_HALION, DONE);
                 instance->SetBossState(DATA_HALION, DONE);
-                RemoveAllGO();
+                RemoveAllGO();// deberia remover todos los go's pero no esta funcionando completamente mas abajo remuevo el go con problemas.
                 _JustDied();
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_AURE_TWILIGHT);
                 DoScriptText(SAY_DEATH, me);
+                me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+
+                if (GameObject* pGoPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL1, 50.0f))
+                    pGoPortal->Delete();
+                
                 switch(instance->instance->GetDifficulty())
                 {
                     case RAID_DIFFICULTY_10MAN_NORMAL:

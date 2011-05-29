@@ -45,6 +45,17 @@ enum eEvents
     EVENT_CAST_CONFLAGRATION_CAST = 6
 };
 
+struct Locations
+{
+    float x, y, z;
+};
+
+static Locations SpawnLoc[]=
+{
+    {3151.3898f, 636.8519f, 78.7396f},  
+    {3149.635f, 668.9644f, 90.507f},
+};
+
 #define TARGETS_10 2
 #define TARGETS_25 5
 
@@ -76,6 +87,7 @@ class boss_ragefire : public CreatureScript
             {
                 instance->SetBossState(DATA_RAGEFIRE, IN_PROGRESS);
                 DoScriptText(SAY_AGGRO, me);
+                me->SetInCombatWithZone();
             }
 
             void KilledUnit(Unit* /*victim*/)
