@@ -49,6 +49,14 @@ enum eEvents
     EVENT_MOVE_TO_RANDOM_PLAYER     = 6
 };
 
+enum Equipment
+{
+    EQUIP_MAIN      = 47156,
+    EQUIP_OFFHAND   = 51812,
+    EQUIP_RANGED    = EQUIP_NO_CHANGE,
+    EQUIP_DONE      = EQUIP_NO_CHANGE,
+};
+
 static const Position SpawnPos[4] =
 {
     {3022.67f, 479.01f, 89.23f, 2.38f},
@@ -90,6 +98,8 @@ class boss_zarithrian : public CreatureScript
 
             void EnterCombat(Unit*)
             {
+                SetEquipmentSlots(false, EQUIP_MAIN, EQUIP_OFFHAND, EQUIP_RANGED);
+
                 instance->SetBossState(DATA_ZARITHRIAN, IN_PROGRESS);
                 DoScriptText(SAY_AGGRO, me);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
