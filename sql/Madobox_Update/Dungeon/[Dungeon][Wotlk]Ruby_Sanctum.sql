@@ -157,6 +157,7 @@ DELETE FROM `spell_linked_spell` WHERE (`spell_trigger`='-74792') AND (`spell_ef
 INSERT INTO `spell_linked_spell` VALUES (-74562, 74610, 0, 'Fiery Combustion removed -> Combustion');
 INSERT INTO `spell_linked_spell` VALUES (-74792, 74800, 0, 'Soul Consumption removed -> Consumption');
 
+-- Spawn Halion 39863
 DELETE FROM `creature` WHERE `id`=39863 AND `map`=724;
 INSERT INTO `creature` VALUES (null,39863,724,15,65535,0,0,3144.93,527.233,72.8887,0.110395,604800,0,0,11156000,0,0,0,0,0,0);
 
@@ -165,3 +166,23 @@ INSERT INTO `spell_script_names` VALUES (74812,'spell_halion_portal');
 
 UPDATE `gameobject_template` SET `data10`=74807 WHERE `entry`=202794;
 UPDATE `gameobject_template` SET `data10`=74812 WHERE `entry`=202796;
+
+-- Trash Mobs and Boss SELECT distinct `id` FROM `creature` WHERE `map`=724
+-- 26712,40417,40419,40421,40423,40626,40627,40628,40870 Trash
+-- 39746,39899,39747,39751,40429,39863 Boss
+-- 39794 Spawn Zeriathian Trash
+-- SELECT `entry` , `difficulty_entry_1` , `difficulty_entry_2` , `difficulty_entry_3` FROM `creature_template` WHERE `entry` IN ( 39746, 39899, 39747, 39751, 40429, 39863 );
+-- IDS HEROIC BOSS
+-- 39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429
+-- ID HEROIC TRASH
+-- 26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424
+
+-- Update damage boss SELECT `entry`,`mindmg`,`maxdmg`,`attackpower`,`dmg_multiplier`,`baseattacktime` FROM `creature_template` WHERE `entry` IN (39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429);
+UPDATE FROM `creature_template` SET `mindmg`='590',`maxdmg`='783',`attackpower`='905',`dmg_multiplier`='35', `baseattacktime`='2000' WHERE `entry` IN (39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429);
+
+-- Update Damage Trash
+UPDATE FROM `creature_template` SET `mindmg`='425',`maxdmg`='602',`attackpower`='670',`dmg_multiplier`='7.5', `baseattacktime`='2000' WHERE `entry` IN (26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424);
+
+-- Inmunidades
+UPDATE `creature_template` SET `mechanic_immune_mask` = `mechanic_immune_mask`|1|2|8|16|32|64|128|256|512|1024|2048|4096|8192|65536|131072|524288|4194304|8388608|33554432|67108864|536870912 WHERE `entry` IN 
+(26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424,39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429);
