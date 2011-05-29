@@ -74,11 +74,15 @@ class boss_emalon : public CreatureScript
         {
             boss_emalonAI(Creature* creature) : BossAI(creature, DATA_EMALON)
             {
+                pInstance = creature->GetInstanceScript();
             }
+
+            InstanceScript* pInstance;
 
             void Reset()
             {
                 _Reset();
+                summons.DespawnAll();
 
                 if (instance)
                     instance->SetData(DATA_EMALON, NOT_STARTED);
@@ -106,8 +110,7 @@ class boss_emalon : public CreatureScript
 
             void EnterCombat(Unit* who)
             {
-                if (instance)
-                    instance->SetData(DATA_EMALON, IN_PROGRESS);
+                DoZoneInCombat();               
 
                 if (!summons.empty())
                 {
@@ -124,7 +127,8 @@ class boss_emalon : public CreatureScript
                 events.ScheduleEvent(EVENT_BERSERK, 360000);
                 events.ScheduleEvent(EVENT_OVERCHARGE, 45000);
 
-                _EnterCombat();
+                if (instance)
+                    instance->SetData(DATA_EMALON, IN_PROGRESS);
             }
 
             void UpdateAI(const uint32 diff)
