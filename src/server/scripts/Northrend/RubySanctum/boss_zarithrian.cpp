@@ -115,6 +115,13 @@ class boss_zarithrian : public CreatureScript
             void JustSummoned(Creature *summon)
             {
                 summons.Summon(summon);
+                summon->SetInCombatWithZone();
+
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 60, true))
+                {
+                    summon->AddThreat(pTarget, 100.0f);
+                    summon->GetMotionMaster()->MoveChase(pTarget);
+                }
             }
 
             void JustReachedHome()
@@ -214,7 +221,8 @@ class npc_onyx_flamecaller : public CreatureScript
                             break;
                         case EVENT_CAST_BLAST_NOVA:
                             DoCast(RAID_MODE(SPELL_BLAST_NOVA_10,SPELL_BLAST_NOVA_25,SPELL_BLAST_NOVA_10,SPELL_BLAST_NOVA_25));
-                            events.ScheduleEvent(EVENT_CAST_BLAST_NOVA, urand(15000,25000));
+                            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM,0))
+                                events.ScheduleEvent(EVENT_CAST_BLAST_NOVA, urand(15000,25000));
                             break;
                         case EVENT_CAST_LAVA_GOUT:
                             DoCast(RAID_MODE(SPELL_LAVA_GOUT_10,SPELL_LAVA_GOUT_25,SPELL_LAVA_GOUT_10,SPELL_LAVA_GOUT_25));
