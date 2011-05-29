@@ -497,10 +497,10 @@ public:
                                 // Solo para testear
                                 case 2: 
                                     TeamID = -1500015; 
-                                    break;*/
+                                    break;
                                 case 10: 
                                     TeamID = -1500016; 
-                                    break;*/
+                                    break;
                                 default:
                                     TeamID = -1500000; 
                                     break;
