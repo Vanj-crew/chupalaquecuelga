@@ -132,10 +132,10 @@ class boss_halion : public CreatureScript
         struct boss_halionAI : public BossAI
         {
             boss_halionAI(Creature *pCreature) : BossAI(pCreature, DATA_HALION)
-                {
-                    ASSERT(instance);
-                    pHalion = me;
-                }
+            {
+                ASSERT(instance);
+                pHalion = me;
+            }
 
             void Reset()
             {

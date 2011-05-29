@@ -73,20 +73,26 @@ class boss_zarithrian : public CreatureScript
             }
 
             void Reset()
-            {
-                instance->SetBossState(DATA_ZARITHRIAN, NOT_STARTED);
+            {                
                 events.Reset();
                 summons.DespawnAll();
                 summons.clear();
                 events.ScheduleEvent(EVENT_CAST_CLEAVE_ARMOR, urand(3500,4500));
                 events.ScheduleEvent(EVENT_CAST_INTIMIDATING_ROAR, urand(10000,11000));
                 events.ScheduleEvent(EVENT_CAST_SUMMON_FLAMECALLER, urand(40000,50000));
+
+                if (me->isAlive())
+                {
+                    instance->SetBossState(DATA_ZARITHRIAN, NOT_STARTED);
+                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                }
             }
 
             void EnterCombat(Unit*)
             {
                 instance->SetBossState(DATA_ZARITHRIAN, IN_PROGRESS);
                 DoScriptText(SAY_AGGRO, me);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             }
 
             void KilledUnit(Unit* /*victim*/)
