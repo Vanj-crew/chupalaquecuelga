@@ -349,7 +349,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "response",       SEC_MODERATOR,      false, NULL,                                                "", ticketResponseCommandTable },
         { "complete",       SEC_MODERATOR,      false, OldHandler<&ChatHandler::HandleGMTicketCompleteCommand>,         "", NULL },
         { NULL,             0,                  false, NULL,                                                "", NULL }
-    };  
+    };
 
     static ChatCommand commandTable[] =
     {
