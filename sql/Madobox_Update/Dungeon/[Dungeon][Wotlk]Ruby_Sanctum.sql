@@ -150,6 +150,8 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_meteor_strike', `flags_extra`
 UPDATE `creature_template` SET `ScriptName` = 'npc_meteor_flame', `flags_extra`=128 WHERE `entry` = '40042';
 UPDATE `creature_template` SET `ScriptName` = 'npc_spell_meteor_strike', `flags_extra`=128 WHERE `entry` = '40029';
 UPDATE `creature_template` SET `ScriptName` = 'npc_summon_halion', `flags_extra`=128 WHERE `entry` = '40044';
+UPDATE `creature_template` SET `flags_extra`=128 WHERE `entry` = '40001'; -- mob_fieri_combustion
+
 
 
 DELETE FROM `spell_linked_spell` WHERE (`spell_trigger`='-74562') AND (`spell_effect`='74610');
@@ -186,3 +188,7 @@ UPDATE `creature_template` SET `mindmg`='425',`maxdmg`='602',`attackpower`='670'
 -- Inmunidades
 UPDATE `creature_template` SET `mechanic_immune_mask` = `mechanic_immune_mask`|1|2|8|16|32|64|128|256|512|1024|2048|4096|8192|65536|131072|524288|4194304|8388608|33554432|67108864|536870912 WHERE `entry` IN 
 (26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424,39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429);
+
+-- respawn
+UPDATE `creature` SET `spawntimesecs` = 604800 WHERE `map` = 724 AND `id` IN (39751, 39746, 39747, 39863, 39805, 39823, 39920, 39864, 39944, 39945, 26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424);
+
