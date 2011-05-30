@@ -178,10 +178,10 @@ UPDATE `gameobject_template` SET `data10`=74812 WHERE `entry`=202796;
 -- 26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424
 
 -- Update damage boss SELECT `entry`,`mindmg`,`maxdmg`,`attackpower`,`dmg_multiplier`,`baseattacktime` FROM `creature_template` WHERE `entry` IN (39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429);
-UPDATE FROM `creature_template` SET `mindmg`='590',`maxdmg`='783',`attackpower`='905',`dmg_multiplier`='35', `baseattacktime`='2000' WHERE `entry` IN (39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429);
+UPDATE `creature_template` SET `mindmg`='590',`maxdmg`='783',`attackpower`='905',`dmg_multiplier`='35', `baseattacktime`='2000' WHERE `entry` IN (39746,39805,39747,39823,39751,39920,39863,39864,39944,39945,39899,39922,40429);
 
 -- Update Damage Trash
-UPDATE FROM `creature_template` SET `mindmg`='425',`maxdmg`='602',`attackpower`='670',`dmg_multiplier`='7.5', `baseattacktime`='2000' WHERE `entry` IN (26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424);
+UPDATE `creature_template` SET `mindmg`='425',`maxdmg`='602',`attackpower`='670',`dmg_multiplier`='7.5', `baseattacktime`='2000' WHERE `entry` IN (26712,40417,40419,40421,40423,40626,40627,40628,40870,39794,40418,40420,40422,40424);
 
 -- Inmunidades
 UPDATE `creature_template` SET `mechanic_immune_mask` = `mechanic_immune_mask`|1|2|8|16|32|64|128|256|512|1024|2048|4096|8192|65536|131072|524288|4194304|8388608|33554432|67108864|536870912 WHERE `entry` IN 
