@@ -150,6 +150,8 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_meteor_strike', `flags_extra`
 UPDATE `creature_template` SET `ScriptName` = 'npc_meteor_flame', `flags_extra`=128 WHERE `entry` = '40042';
 UPDATE `creature_template` SET `ScriptName` = 'npc_spell_meteor_strike', `flags_extra`=128 WHERE `entry` = '40029';
 UPDATE `creature_template` SET `ScriptName` = 'npc_summon_halion', `flags_extra`=128 WHERE `entry` = '40044';
+UPDATE `creature_template` SET `flags_extra`=128 WHERE `entry` = '40001'; -- mob_fieri_combustion
+
 
 
 DELETE FROM `spell_linked_spell` WHERE (`spell_trigger`='-74562') AND (`spell_effect`='74610');
