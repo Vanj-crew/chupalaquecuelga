@@ -516,3 +516,17 @@ uint8 Vehicle::GetAvailableSeatCount() const
 
     return ret;
 }
+
+void Vehicle::TeleportVehicle(float x, float y, float z, float ang)
+{
+    vehiclePlayers.clear();
+    
+    for(int8 i = 0; i < 8; i++)
+        if (Unit* player = GetPassenger(i))
+            vehiclePlayers.insert(player->GetGUID());
+    RemoveAllPassengers();
+    me->NearTeleportTo(x, y, z, ang);
+    for (GuidSet::const_iterator itr = vehiclePlayers.begin(); itr != vehiclePlayers.end(); ++itr)
+        if(Unit *plr = sObjectAccessor->FindUnit((*itr)))
+            plr->NearTeleportTo(x, y, z, ang);
+}

@@ -35,7 +35,8 @@
 #include "zlib.h"
 #include "ObjectAccessor.h"
 #include "Object.h"
-#include "Battleground.h"
+#include "BattlegroundMgr.h"
+#include "BattlefieldMgr.h"
 #include "OutdoorPvP.h"
 #include "Pet.h"
 #include "SocialMgr.h"
@@ -1722,12 +1723,70 @@ void WorldSession::SendSetPhaseShift(uint32 PhaseShift)
     SendPacket(&data);
 }
 
+//Battlefield and Battleground
+void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO,"WORLD: CMSG_AREA_SPIRIT_HEALER_QUERY");
+
+    Battleground *bg = _player->GetBattleground();
+
+    uint64 guid;
+    recv_data >> guid;
+
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
+    if (!unit)
+        return;
+
+    if (!unit->isSpiritService())                            // it's not spirit service
+        return;
+
+    if (bg)
+        sBattlegroundMgr->SendAreaSpiritHealerQueryOpcode(_player, bg, guid);
+
+    if(Battlefield* Bf=sBattlefieldMgr.GetBattlefieldToZoneId(_player->GetZoneId()))
+        Bf->SendAreaSpiritHealerQueryOpcode(_player,guid);
+
+}
+
+void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO,"WORLD: CMSG_AREA_SPIRIT_HEALER_QUEUE");
+
+    Battleground *bg = _player->GetBattleground();
+
+    uint64 guid;
+    recv_data >> guid;
+
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
+    if (!unit)
+        return;
+
+    if (!unit->isSpiritService())                            // it's not spirit service
+        return;
+
+    if (bg)
+        bg->AddPlayerToResurrectQueue(guid, _player->GetGUID());
+
+    if(Battlefield* Bf=sBattlefieldMgr.GetBattlefieldToZoneId(_player->GetZoneId()))
+        Bf->AddPlayerToResurrectQueue(guid, _player->GetGUID());
+
+}
+
+
 void WorldSession::HandleHearthAndResurrect(WorldPacket& /*recv_data*/)
 {
     if (_player->isInFlight())
         return;
-
-    AreaTableEntry const *atEntry = GetAreaEntryByAreaID(_player->GetAreaId());
+    
+    uint32 BattleZone = _player->GetZoneId();
+    Battlefield* Bf= sBattlefieldMgr.GetBattlefieldToZoneId(BattleZone);
+    if(Bf)
+    {
+        Bf->PlayerAskToLeave(_player);
+        return;
+    }
+    AreaTableEntry const *atEntry = sAreaStore.LookupEntry(_player->GetAreaId());
+    
     if (!atEntry || !(atEntry->flags & AREA_FLAG_OUTDOOR_PVP2))
         return;
 

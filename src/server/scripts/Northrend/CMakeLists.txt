@@ -166,6 +166,7 @@ set(scripts_STAT_SRCS
   Northrend/IcecrownCitadel/boss_the_lich_king.cpp
   Northrend/IcecrownCitadel/boss_gunship_battle.cpp
   Northrend/zuldrak.cpp
+  Northrend/wintergrasp.cpp
   Northrend/icecrown.cpp
   Northrend/Gundrak/boss_slad_ran.cpp
   Northrend/Gundrak/instance_gundrak.cpp

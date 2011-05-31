@@ -28,6 +28,7 @@
 #include "CreatureAI.h"
 #include "MapManager.h"
 #include "BattlegroundIC.h"
+#include "BattlefieldMgr.h"
 
 bool IsAreaEffectTarget[TOTAL_SPELL_TARGETS];
 SpellEffectTargetTypes EffectTargetType[TOTAL_SPELL_EFFECTS];
@@ -3091,6 +3092,15 @@ bool SpellArea::IsFitToRequirements(Player const* player, uint32 newZone, uint32
     // Extra conditions -- leaving the possibility add extra conditions...
     switch(spellId)
     {
+        case 58730:
+            {
+                if (!player)
+                    return false;
+                Battlefield * BF = sBattlefieldMgr.GetBattlefieldToZoneId(player->GetZoneId());
+                if (!BF || BF->CanFlyIn()==true || (!player->HasAuraType(SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED) && !player->HasAuraType(SPELL_AURA_FLY)))
+                    return false;
+                break;
+            }
         case 58600: // No fly Zone - Dalaran
             {
                 if (!player)
@@ -3103,6 +3113,16 @@ bool SpellArea::IsFitToRequirements(Player const* player, uint32 newZone, uint32
                     return false;
                 break;
             }
+            case 57940: // Essence of Wintergrasp - Northrend
+                {
+                    if (!player)
+                        return false;
+
+                    Battlefield *Bf = sBattlefieldMgr.GetBattlefieldToZoneId(4197);
+                    if (!Bf || player->GetTeamId() != Bf->GetDefenderTeam())
+                        return false;
+                    break;
+                }
         case SPELL_OIL_REFINERY: // Oil Refinery - Isle of Conquest.
         case SPELL_QUARRY: // Quarry - Isle of Conquest.
             {
