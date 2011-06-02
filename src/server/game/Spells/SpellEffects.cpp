@@ -5706,7 +5706,13 @@ void Spell::EffectStuck(SpellEffIndex /*effIndex*/)
     if (!spellInfo)
         return;
     Spell spell(pTarget, spellInfo, true, 0);
-    spell.SendSpellCooldown();
+    // Check if Hearthstone has cooldown
+    if (spell.getState() == SPELL_STATE_IDLE)
+    {
+        pTarget->TeleportTo(pTarget->GetStartPosition(), unitTarget == m_caster ? TELE_TO_SPELL : 0);
+        spell.SendSpellCooldown();
+    }
+    else spell.cast(true);
 }
 
 void Spell::EffectSummonPlayer(SpellEffIndex /*effIndex*/)
