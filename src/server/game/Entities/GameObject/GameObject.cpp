@@ -451,6 +451,10 @@ void GameObject::Update(uint32 diff)
                         if (goInfo->trap.spellId)
                             CastSpell(ok, goInfo->trap.spellId);
 
+                        if (ok->GetTypeId() == TYPEID_PLAYER)
+                            if (sScriptMgr->OnGossipHello(ok->ToPlayer(), this))
+                                return;
+
                         // Traps should put caster in combat and activate PvP mode
                         if (owner && owner->isAlive())
                             owner->CombatStart(ok);
@@ -825,14 +829,6 @@ bool GameObject::IsTransport() const
     return gInfo->type == GAMEOBJECT_TYPE_TRANSPORT || gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT;
 }
 
-bool GameObject::IsDestructibleBuilding() const
-{
-    GameObjectInfo const * gInfo = GetGOInfo();
-    if (!gInfo) 
-        return false;
-    return gInfo->type == GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING;
-}
-
 // is Dynamic transport = non-stop Transport
 bool GameObject::IsDynTransport() const
 {
@@ -868,11 +864,6 @@ bool GameObject::isVisibleForInState(WorldObject const* seer) const
 {
     if (!WorldObject::isVisibleForInState(seer))
         return false;
-
-    // Wrong Implementation :S
-    // Transport always visible at this step implementation
-    // if ((IsDestructibleBuilding() || IsTransport()) && IsInMap(u))
-        //return true;
 
     // Despawned
     if (!isSpawned())

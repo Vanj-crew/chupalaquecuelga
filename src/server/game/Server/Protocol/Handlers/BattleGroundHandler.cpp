@@ -34,6 +34,8 @@
 #include "Opcodes.h"
 #include "DisableMgr.h"
 #include "Group.h"
+#include "OutdoorPvPWG.h"
+#include "OutdoorPvPMgr.h"
 
 void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket & recv_data)
 {
@@ -579,6 +581,62 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recv_data*/)
             SendPacket(&data);
         }
     }
+}
+
+void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AREA_SPIRIT_HEALER_QUERY");
+
+    Battleground *bg = _player->GetBattleground();
+
+    uint64 guid;
+    recv_data >> guid;
+
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
+    if (!unit)
+        return;
+
+    if (!unit->isSpiritService())                            // it's not spirit service
+        return;
+
+    if (bg)
+        sBattlegroundMgr->SendAreaSpiritHealerQueryOpcode(_player, bg, guid);
+    else
+        // Wintergrasp Hack till 3.2 and it's implemented as BG
+        if (GetPlayer()->GetZoneId() == 4197)
+        {
+            OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197);
+            if (pvpWG && pvpWG->isWarTime())
+                pvpWG->SendAreaSpiritHealerQueryOpcode(_player, guid);
+        }
+}
+
+void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AREA_SPIRIT_HEALER_QUEUE");
+
+    Battleground *bg = _player->GetBattleground();
+
+    uint64 guid;
+    recv_data >> guid;
+
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
+    if (!unit)
+        return;
+
+    if (!unit->isSpiritService())                            // it's not spirit service
+        return;
+
+    if (bg)
+        bg->AddPlayerToResurrectQueue(guid, _player->GetGUID());
+    else
+        // Wintergrasp Hack till 3.2 and it's implemented as BG
+        if (GetPlayer()->GetZoneId() == 4197)
+        {
+            OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197);
+            if (pvpWG && pvpWG->isWarTime())
+                pvpWG->AddPlayerToResurrectQueue(guid, _player->GetGUID());
+        }
 }
 
 void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recv_data)

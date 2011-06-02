@@ -517,16 +517,28 @@ uint8 Vehicle::GetAvailableSeatCount() const
     return ret;
 }
 
-void Vehicle::TeleportVehicle(float x, float y, float z, float ang)
+void Vehicle::Relocate(Position pos)
 {
-    vehiclePlayers.clear();
-    
-    for(int8 i = 0; i < 8; i++)
-        if (Unit* player = GetPassenger(i))
-            vehiclePlayers.insert(player->GetGUID());
-    RemoveAllPassengers();
-    me->NearTeleportTo(x, y, z, ang);
-    for (GuidSet::const_iterator itr = vehiclePlayers.begin(); itr != vehiclePlayers.end(); ++itr)
-        if(Unit *plr = sObjectAccessor->FindUnit((*itr)))
-            plr->NearTeleportTo(x, y, z, ang);
+   sLog->outDebug(LOG_FILTER_VEHICLES, "Vehicle::Relocate %u", me->GetEntry());
+
+   std::set<Unit*> vehiclePlayers;
+   for (int8 i = 0; i < 8; i++)
+       vehiclePlayers.insert(GetPassenger(i));
+
+   // passengers should be removed or they will have movement stuck
+   RemoveAllPassengers();
+
+   for (std::set<Unit*>::const_iterator itr = vehiclePlayers.begin(); itr != vehiclePlayers.end(); ++itr)
+   {
+       if (Unit* plr = (*itr))
+       {
+           // relocate/setposition doesn't work for player
+           plr->NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation());
+           //plr->TeleportTo(pPlayer->GetMapId(), triggerPos.GetPositionX(), triggerPos.GetPositionY(), triggerPos.GetPositionZ(), triggerPos.GetOrientation(), TELE_TO_NOT_LEAVE_COMBAT);
+       }
+   }
+
+   me->SetPosition(pos, true);
+   // problems, and impossible to do delayed enter
+   //pPlayer->EnterVehicle(veh);
 }
