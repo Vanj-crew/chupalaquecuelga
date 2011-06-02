@@ -1755,7 +1755,7 @@ void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask, DamageEff
                                    uint32 absorbed = uint32(currentAbsorb * caster->GetArmor() * 0.01f);
                                    if(AuraEffect const * aurEff->GetAuraEffect(58635,0)) //deteccion del glifo (aura)
                                         AddPctN(absorbed, aurEff->GetAmount()); //asignacion de mejora (reemplazo)
-                                   dmgInfo.AbosrbDamage(absorbed);
+                                   dmgInfo.AbsorbDamage(absorbed);
                              }
                          continue;
                     } 
