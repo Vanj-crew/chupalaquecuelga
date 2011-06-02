@@ -9600,7 +9600,7 @@ void Player::SendBGWeekendWorldStates()
                 SendUpdateWorldState(bl->HolidayWorldStateId, 0);
         }
     }
-    SendBGWeekendWorldStates()
+    SendBGWeekendWorldStates();
 }
 
 uint32 Player::GetXPRestBonus(uint32 xp)
