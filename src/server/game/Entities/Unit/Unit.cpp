@@ -1742,6 +1742,25 @@ void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask, DamageEff
             if (absorbAurEff->GetAmount() <= 0)
                 absorbAurEff->GetBase()->Remove(AURA_REMOVE_BY_ENEMY_SPELL);
         }
+        //Implementando Glifo Armadura Inquebrantable
+        SpellEntry const * spellProto = absorbAurEff->GetSpellProto();
+        /* este switch deja abierta la posibilidad de seguir mejorando o añadiendo 
+           nuevas mejoras, independiente de la clase */
+       
+        switch(spellProto->SpellFamilyName){
+             case SPELLFAMILY_DEATHKNIGHT: {
+                    switch(spellProto->Id){
+                         case 51271: //Spell Armadura inquebrantable
+                             if(Unit * caster = absorbAurEff->GetCaster()) {
+                                   uint32 absorbed = uint32(currentAbsorb * caster->GetArmor() * 0.01f);
+                                   if(AuraEffect const * aurEff->GetAuraEffect(58635,0)) //deteccion del glifo (aura)
+                                        AddPctN(absorbed, aurEff->GetAmount()); //asignacion de mejora (reemplazo)
+                                   dmgInfo.AbsorbDamage(absorbed);
+                             }
+                         continue;
+                    } 
+             }
+       }
     }
 
     // absorb by mana cost
