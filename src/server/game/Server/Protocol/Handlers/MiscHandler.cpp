@@ -1782,7 +1782,8 @@ void WorldSession::HandleHearthAndResurrect(WorldPacket& /*recv_data*/)
     Battlefield* Bf= sBattlefieldMgr.GetBattlefieldToZoneId(BattleZone);
     if(Bf)
     {
-        Bf->PlayerAskToLeave(_player);
+        Bf->AskToLeaveQueue(_player);
+        //Bf->PlayerAskToLeave(_player);
         return;
     }
     AreaTableEntry const *atEntry = sAreaStore.LookupEntry(_player->GetAreaId());
