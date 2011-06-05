@@ -64,6 +64,7 @@ void AddSC_wp_commandscript();
 //Custom
 void AddSC_Reset();
 void AddSC_npc_gurubashi_theme();
+void AddSC_Argen_Tournament();
 
 #ifdef SCRIPTS
 //world
@@ -1254,6 +1255,7 @@ void AddCustomScripts()
 
     AddSC_Reset();
     AddSC_npc_gurubashi_theme();
+    AddSC_Argen_Tournament();
 
 #endif
 }
