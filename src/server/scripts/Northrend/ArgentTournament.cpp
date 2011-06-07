@@ -24,6 +24,7 @@
 ######*/
 
 // UPDATE `creature_template` SET `ScriptName`='npc_chillmaw' WHERE `entry`=33687;
+// Bug conocido: El npc al no ser matado desaparece hasta reiniciar el server.
 enum Chillmaw
 {
     SPELL_FROST_BREATH  = 65248,
@@ -77,14 +78,12 @@ public:
             {   
                 if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_FROST_BREATH);
-
                 Spell_FrostBreath_Timer = urand(15000, 16500);
             } else Spell_FrostBreath_Timer -=diff;
 
             if (Spell_WingBuffet_Timer <= diff)
             {
                 DoCast(me, SPELL_WING_BUFFET);
-
                 Spell_WingBuffet_Timer = urand(4000, 6500);
             } else Spell_WingBuffet_Timer -= diff;
 
@@ -126,18 +125,348 @@ public:
                 }
                 Pasajero_3 = true;
             }
-
             DoMeleeAttackIfReady();
         }
     };
-    
+
+    void EnterCombat(Unit* /*who*/) { }
+        
     CreatureAI* GetAI(Creature* pCreature) const
     {
         return new npc_chillmawAI (pCreature);
     }
 };
 
+/*######
+## npc_vendor_argent_tournament
+######*/
+
+const uint32 ArgentTournamentVendor[10][4] =
+{
+    {33553,13726,2,14460},  // Orc
+    {33554,13726,8,14464},  // Troll
+    {33556,13728,6,14458},  // Tauren
+    {33555,13729,5,14459},  // Undead
+    {33557,13731,10,14465}, // Blood Elf
+    {33307,13699,1,14456},  // Human
+    {33310,13713,3,14457},  // Dwarf
+    {33653,13725,4,14463},  // Night Elf
+    {33650,13723,7,14462},  // Gnome
+    {33657,13724,11,14461}  // Draenei
+};
+
+class npc_vendor_argent_tournament : public CreatureScript
+{
+public:
+    npc_vendor_argent_tournament() : CreatureScript("npc_vendor_argent_tournament") { }
+
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    {
+        bool npcCheck = false;
+        bool questCheck = false;
+        bool raceCheck = false;
+        uint32 textId = 0;
+	
+        for (int i = 0; (i < 10) && !npcCheck; i++)
+        {
+            if (pCreature->GetEntry() == ArgentTournamentVendor[i][0])
+            {
+                npcCheck = true;
+                questCheck = pPlayer->GetQuestStatus(ArgentTournamentVendor[i][1]) == QUEST_STATUS_COMPLETE;
+                raceCheck = pPlayer->getRace() == ArgentTournamentVendor[i][2];
+                textId = ArgentTournamentVendor[i][3];
+		    }
+	    }
+	
+        if (questCheck || raceCheck)
+            pPlayer->SEND_VENDORLIST(pCreature->GetGUID()); 
+        else
+            pPlayer->SEND_GOSSIP_MENU(textId, pCreature->GetGUID());
+        return true;
+    }
+};
+
+
+/*######
+* quest_givers_argent_tournament
+######*/
+
+class quest_givers_argent_tournament : public CreatureScript
+{
+public:
+    quest_givers_argent_tournament(): CreatureScript("quest_givers_argent_tournament"){}
+
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    {
+
+            if (pCreature->isQuestGiver())
+            {    
+                Object *pObject = (Object*)pCreature;
+                QuestRelations* pObjectQR = sObjectMgr->GetCreatureQuestRelationMap();
+                QuestRelations* pObjectQIR = sObjectMgr->GetCreatureQuestInvolvedRelation();
+                QuestMenu &qm = pPlayer->PlayerTalkClass->GetQuestMenu();
+                qm.ClearMenu();
+                
+                for (QuestRelations::const_iterator i = pObjectQIR->lower_bound(pObject->GetEntry()); i != pObjectQIR->upper_bound(pObject->GetEntry()); ++i)
+                {
+                    uint32 quest_id = i->second;
+                    QuestStatus status = pPlayer->GetQuestStatus(quest_id);
+                    if (status == QUEST_STATUS_COMPLETE && !pPlayer->GetQuestRewardStatus(quest_id))
+                        qm.AddMenuItem(quest_id, 4);
+                    else if (status == QUEST_STATUS_INCOMPLETE)
+                        qm.AddMenuItem(quest_id, 4);
+                    //else if (status == QUEST_STATUS_AVAILABLE)
+                    //    qm.AddMenuItem(quest_id, 2);
+                }
+                
+                bool EligibilityAlliance = pPlayer->GetQuestStatus(13686) == QUEST_STATUS_COMPLETE;
+                bool EligibilityHorde = pPlayer->GetQuestStatus(13687) == QUEST_STATUS_COMPLETE;
+
+                for (QuestRelations::const_iterator i = pObjectQR->lower_bound(pObject->GetEntry()); i != pObjectQR->upper_bound(pObject->GetEntry()); ++i)
+                {
+                    uint32 quest_id = i->second;
+                    Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
+
+                    if (!pQuest) 
+                        continue;
+
+                    switch (quest_id)
+                    {
+                        case 13707: // Valiant Of Orgrimmar
+                        case 13708: // Valiant Of Sen'jin
+                        case 13709: // Valiant Of Thunder Bluff
+                        case 13710: // Valiant Of Undercity
+                        case 13711: // Valiant Of Silvermoon
+                            if(!EligibilityHorde)
+                            {
+                                QuestStatus status = pPlayer->GetQuestStatus(quest_id);
+                                if (pQuest->IsAutoComplete() && pPlayer->CanTakeQuest(pQuest, false))
+                                    qm.AddMenuItem(quest_id, 4);
+                                else 
+                                    if (status == QUEST_STATUS_NONE && pPlayer->CanTakeQuest(pQuest, false))
+                                        qm.AddMenuItem(quest_id, 2);
+                            }
+                            break;
+                        case 13593: // Valiant Of Stormwind
+                        case 13703: // Valiant Of Ironforge
+                        case 13706: // Valiant Of Darnassus
+                        case 13704: // Valiant Of Gnomeregan
+                        case 13705: // Valiant Of The Exodar
+                            if (!EligibilityAlliance)
+                            {
+                                QuestStatus status = pPlayer->GetQuestStatus(quest_id);
+                                if (pQuest->IsAutoComplete() && pPlayer->CanTakeQuest(pQuest, false))
+                                    qm.AddMenuItem(quest_id, 4);
+                                else 
+                                    if (status == QUEST_STATUS_NONE && pPlayer->CanTakeQuest(pQuest, false))
+                                        qm.AddMenuItem(quest_id, 2);
+                            }
+                            break;
+                        default:
+                            QuestStatus status = pPlayer->GetQuestStatus(quest_id);
+
+                            if (pQuest->IsAutoComplete() && pPlayer->CanTakeQuest(pQuest, false))
+                                qm.AddMenuItem(quest_id, 4);
+                            else 
+                                if (status == QUEST_STATUS_NONE && pPlayer->CanTakeQuest(pQuest, false))
+                                    qm.AddMenuItem(quest_id, 2);
+                            break;
+                    }
+                }
+            }
+            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+            return true;
+    }
+};
+
+/*######
+Argent Tournament - Spell
+Spell Fixed:
+    - 62960 - Charge Mount Npc.
+    - 62575 - Shield Mount Npc.
+    - 62544 - Melee Mount Npc.
+    - 62863 - Duel Mount Npc.
+
+DELETE FROM `spell_script_names` WHERE `spell_id` IN (62960,62575,62544,62863);
+INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES 
+('62960', 'spell_tournament_charge'),
+('62575', 'spell_tournament_shield'),
+('62544', 'spell_tournament_melee'),
+('62863', 'spell_tournament_duel');
+######*/
+
+class spell_tournament_charge : public SpellScriptLoader
+{
+public:
+    spell_tournament_charge() : SpellScriptLoader("spell_tournament_charge") { }
+
+    class spell_tournament_charge_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_tournament_charge_SpellScript);
+
+        void HandleEffectScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* pTarget = GetHitUnit())
+            {
+                if (Unit *caster = GetCaster())
+                {
+                    caster->CastSpell(pTarget,74399,true);
+                    caster->CastSpell(pTarget,68321,true);
+
+                    if (pTarget->GetTypeId() == TYPEID_UNIT && pTarget->ToCreature()->GetEntry() == 33272)
+                    {
+                        // Kill Credit
+                        if (Unit *player = caster->GetCharmerOrOwner())
+                            player->CastSpell(player,62658,true);
+                    }
+                }
+
+                if (pTarget->GetAura(64100))
+                    pTarget->RemoveAuraFromStack(64100);
+                else 
+                    if (pTarget->GetAura(62552))
+                        pTarget->RemoveAuraFromStack(62552);
+                    else 
+                        if (pTarget->GetAura(62719))
+                            pTarget->RemoveAuraFromStack(62719);
+            }
+        }
+
+        void Register()
+        {
+            OnEffect += SpellEffectFn(spell_tournament_charge_SpellScript::HandleEffectScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript *GetSpellScript() const
+    {
+        return new spell_tournament_charge_SpellScript();
+    }
+};
+
+class spell_tournament_shield : public SpellScriptLoader
+{
+public:
+    spell_tournament_shield() : SpellScriptLoader("spell_tournament_shield") { }
+
+    class spell_tournament_shield_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_tournament_shield_SpellScript);
+
+        void HandleEffectScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* pTarget = GetHitUnit())
+            {
+                if (Unit *caster = GetCaster())
+                {
+                    caster->CastSpell(pTarget,62626,true );
+
+                    if (pTarget->GetTypeId() == TYPEID_UNIT && pTarget->ToCreature()->GetEntry() == 33243)
+                    {
+                        // Kill Credit
+                        if (Unit *player = caster->GetCharmerOrOwner())
+                            player->CastSpell(player,62673,true);
+                    }
+                }
+
+                if (pTarget->GetAura(64100))
+                    pTarget->RemoveAuraFromStack(64100);
+                else 
+                    if (pTarget->GetAura(62552))
+                        pTarget->RemoveAuraFromStack(62552);
+                    else 
+                        if (pTarget->GetAura(62719))
+                            pTarget->RemoveAuraFromStack(62719);
+            }
+        }
+
+        void Register()
+        {
+            OnEffect += SpellEffectFn(spell_tournament_shield_SpellScript::HandleEffectScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript *GetSpellScript() const
+    {
+        return new spell_tournament_shield_SpellScript();
+    }
+};
+
+class spell_tournament_melee : public SpellScriptLoader
+{
+public:
+    spell_tournament_melee() : SpellScriptLoader("spell_tournament_melee") { }
+
+    class spell_tournament_melee_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_tournament_melee_SpellScript);
+
+        void HandleEffectScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* pTarget = GetHitUnit())
+            {
+                if (Unit *caster = GetCaster())
+                {
+                    if (pTarget->GetTypeId() == TYPEID_UNIT && pTarget->ToCreature()->GetEntry() == 33229)
+                    {
+                        // Kill Credit
+                        if (Unit *player = caster->GetCharmerOrOwner())
+                            player->CastSpell(player,62672,true);
+                    }
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffect += SpellEffectFn(spell_tournament_melee_SpellScript::HandleEffectScriptEffect, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+        }
+    };
+
+    SpellScript *GetSpellScript() const
+    {
+        return new spell_tournament_melee_SpellScript();
+    }
+};
+
+class spell_tournament_duel : public SpellScriptLoader
+{
+public:
+    spell_tournament_duel() : SpellScriptLoader("spell_tournament_duel") { }
+
+    class spell_tournament_duel_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_tournament_duel_SpellScript);
+
+        void HandleEffectScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* pTarget = GetHitUnit())
+            {
+                if (pTarget->GetTypeId() != TYPEID_PLAYER)
+                    return;
+
+                if (Unit *caster = GetCaster()->GetCharmerOrOwner())
+                    caster->CastSpell(pTarget,62875,true);
+            }
+        }
+
+        void Register()
+        {
+            OnEffect += SpellEffectFn(spell_tournament_duel_SpellScript::HandleEffectScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript *GetSpellScript() const
+    {
+        return new spell_tournament_duel_SpellScript();
+    }
+};
+
 void AddSC_Argen_Tournament()
 {
     new npc_chillmaw;
+    new spell_tournament_charge;
+    new spell_tournament_shield;
+    new spell_tournament_melee;
+    new spell_tournament_duel;
 }
