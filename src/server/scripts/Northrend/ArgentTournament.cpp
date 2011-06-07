@@ -288,6 +288,11 @@ public:
 UPDATE `creature_template` SET `ScriptName`='npc_quest_givers_for_crusaders' WHERE `entry` IN (34882, 35094);
 ######*/
 
+enum eCrusader
+{
+    TITLE_CRUSADER    = 123
+};
+
 class npc_quest_givers_for_crusaders : public CreatureScript
 {
 public:
