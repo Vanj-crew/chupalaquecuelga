@@ -17,6 +17,8 @@
  */
 
 #include "ScriptPCH.h"
+#include "SpellAuraEffects.h"
+#include "ScriptMgr.h"
 
 /*######
 ## Quest Soporte Threat From Above
@@ -139,6 +141,7 @@ public:
 
 /*######
 ## npc_vendor_argent_tournament
+UPDATE `creature_template` SET `ScriptName`='npc_vendor_argent_tournament' WHERE `entry` IN (33553, 33554, 33556, 33555, 33557, 33307, 33310, 33653, 33650, 33657);
 ######*/
 
 const uint32 ArgentTournamentVendor[10][4] =
@@ -189,6 +192,7 @@ public:
 
 /*######
 * quest_givers_argent_tournament
+UPDATE `creature_template` SET `ScriptName`='quest_givers_argent_tournament' WHERE `entry` IN (33593, 33592, 33225, 33312, 33335, 33379, 33373, 33361, 33403, 33372);
 ######*/
 
 class quest_givers_argent_tournament : public CreatureScript
@@ -276,6 +280,27 @@ public:
             }
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             return true;
+    }
+};
+
+/*######
+* npc_quest_givers_for_crusaders
+UPDATE `creature_template` SET `ScriptName`='npc_quest_givers_for_crusaders' WHERE `entry` IN (34882, 35094);
+######*/
+
+class npc_quest_givers_for_crusaders : public CreatureScript
+{
+public:
+    npc_quest_givers_for_crusaders() : CreatureScript("npc_quest_givers_for_crusaders") { }
+
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    {
+        if (pPlayer->HasTitle(TITLE_CRUSADER))
+            if (pCreature->isQuestGiver())
+                pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+        return true;
     }
 };
 
@@ -465,6 +490,8 @@ public:
 void AddSC_Argen_Tournament()
 {
     new npc_chillmaw;
+    new npc_vendor_argent_tournament;
+    new quest_givers_argent_tournament;
     new spell_tournament_charge;
     new spell_tournament_shield;
     new spell_tournament_melee;
