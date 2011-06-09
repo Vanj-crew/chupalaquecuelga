@@ -521,6 +521,8 @@ void BossAI::_Reset()
     summons.DespawnAll();
     if (instance)
         instance->SetBossState(_bossId, NOT_STARTED);
+
+    inFightAggroCheck_Timer = MAX_AGGRO_PULSE_TIMER;
 }
 
 void BossAI::_JustDied()
@@ -532,6 +534,16 @@ void BossAI::_JustDied()
         instance->SetBossState(_bossId, DONE);
         instance->SaveToDB();
     }
+}
+
+void BossAI::_DoAggroPulse(const uint32 diff)
+{
+   if(inFightAggroCheck_Timer < diff)
+   {
+       if(me->getVictim() && me->getVictim()->ToPlayer())
+           DoAttackerGroupInCombat(me->getVictim()->ToPlayer());
+       inFightAggroCheck_Timer = MAX_AGGRO_PULSE_TIMER;
+   }else inFightAggroCheck_Timer -= diff;
 }
 
 void BossAI::_EnterCombat()
@@ -559,6 +571,11 @@ void BossAI::TeleportCheaters()
         if (Unit* target = (*itr)->getTarget())
             if (target->GetTypeId() == TYPEID_PLAYER && !CheckBoundary(target))
                 target->NearTeleportTo(x, y, z, 0);
+}
+
+void BossAI::SetImmuneToDeathGrip(bool set)
+{
+   me->ApplySpellImmune(0, IMMUNITY_ID, 49560, set);
 }
 
 bool BossAI::CheckBoundary(Unit* who)

@@ -762,7 +762,6 @@ bool SpellMgr::_isPositiveEffect(uint32 spellId, uint32 effIndex, bool deep) con
                 case 34709: // Shadow Sight
                 case 61987: // Avenging Wrath Marker
                 case 61988: // Divine Shield exclude aura
-                case 63322: // Saronite Vapors
                     return false;
                 case 30877: // Tag Murloc
                     return true;
@@ -3237,19 +3236,23 @@ bool SpellMgr::CanAurasStack(Aura const *aura1, Aura const *aura2, bool sameCast
     // same spell
     if (spellId_1 == spellId_2)
     {
-        // Hack for Incanter's Absorption
-        if (spellId_1 == 44413)
-            return true;
-        // Power Spark
-        if (spellId_1 == 55849)
-            return true;
         if (aura1->GetCastItemGUID() && aura2->GetCastItemGUID())
             if (aura1->GetCastItemGUID() != aura2->GetCastItemGUID() && (GetSpellCustomAttr(spellId_1) & SPELL_ATTR0_CU_ENCHANT_PROC))
                 return true;
-        // same spell with same caster should not stack
-        return false;
+        
+        switch (spellId_1)
+        {
+            case 30166: // Shadow Grasp
+            case 30207: // Shadow Grasp
+            case 30531: // Soul Transfer
+            case 44413: // Hack for Incanter's Absorption
+            case 55849: // Power Spark
+            case 62505: // Harpoon Shot
+                return true;
+            default:
+                return false; // same spell with same caster should not stack
+        }
     }
-
     return true;
 }
 
@@ -3775,6 +3778,7 @@ void SpellMgr::LoadSpellCustomAttr()
         case 27820:                             // Mana Detonation
         //case 28062: case 39090:                 // Positive/Negative Charge
         //case 28085: case 39093:
+        case 62290:                             // Burning Tar
         case 69782: case 69796:                 // Ooze Flood
         case 69798: case 69801:                 // Ooze Flood
         case 69538: case 69553: case 69610:     // Ooze Combine
@@ -3804,8 +3808,14 @@ void SpellMgr::LoadSpellCustomAttr()
         case 25425: // Shoot
         case 45761: // Shoot
         case 42611: // Shoot
-        case 62374: // Pursued
+        case 50988: // Glare of the Tribunal (N)
+        case 59870: // Glare of the Tribunal (H)
+        case 55927: // Sear Beam (N)
+        case 59509: // Sear Beam (H)
         case 56397: // Arcane Barrage
+        case 64599: // Arcane Barrage
+        case 64607: // Arcane Barrage
+        case 62301: // Cosmic Smash
             spellInfo->MaxAffectedTargets = 1;
             count++;
             break;
@@ -3830,6 +3840,8 @@ void SpellMgr::LoadSpellCustomAttr()
         case 54171: // Divine Storm
         case 60939: // Surge of Power
         case 61693: // Arcane Storm
+        case 64598: // Cosmic Smash
+        case 61916: // Lightning Whirl (10N)
             spellInfo->MaxAffectedTargets = 3;
             count++;
             break;
@@ -3859,6 +3871,7 @@ void SpellMgr::LoadSpellCustomAttr()
         case 54835: // Curse of the Plaguebringer - Noth (H)
         case 54098: // Poison Bolt Volly - Faerlina (H)
         case 61694: // Arcane Storm
+        case 63482: // Lightning Whirl (25N)
             spellInfo->MaxAffectedTargets = 10;
             count++;
             break;
@@ -3966,17 +3979,6 @@ void SpellMgr::LoadSpellCustomAttr()
         case 62907: // Freya's Ward
         case 62947:
             spellInfo->DurationIndex = 0;
-            count++;
-            break;
-        case 62713: // Ironbranch's Essence
-        case 62968: // Brightleaf's Essence
-            spellInfo->DurationIndex = 39;
-            count++;
-            break;
-        case 62661: // Searing Flames
-        case 61915: // Lightning Whirl 10
-        case 63483: // Lightning Whirl 25
-            spellInfo->InterruptFlags = 47;
             count++;
             break;
         case 16834: // Natural shapeshifter
@@ -4105,35 +4107,60 @@ void SpellMgr::LoadSpellCustomAttr()
             break;
         // ULDUAR SPELLS
         //
+        case 62039: // Hodir - Biting Cold - Remove on Move
+            spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_MOVE;
+            count++;
+            break;
+        case 62775: // XT-002 - Tympanic Tantrum
+        case 64443: // Algalon - Big Bang
+        case 64584: // Algalon - Big Bang
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_ARMOR;
+            count++;
+            break;
+        case 65210: // Keeper Mimiron Destabilization Matrix
+            // Ignore LoS (because Mimiron stands in a Tube and is out of LoS)
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_LOS;
+            count++;
+            break;
+        case 62016: // Thorim - Charge Orb
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_LOS;
+            spellInfo->MaxAffectedTargets = 1;
+            ++count;
+            break;
+        case 62488: // Ignis Activate Construct (only visually)
+        case 63024: // XT-002 Gravity Bomb
+        case 64234: // XT-002 Gravity Bomb
+        case 63018: // XT-002 Searing Light
+        case 65121: // XT-002 Searing Light
+        case 65301: // Sara Psychosis
+        case 63830: // Sara Malady of the Mind
+        case 64465: // Yogg Saron Shadow Beacon
         case 63342: // Focused Eyebeam Summon Trigger
             spellInfo->MaxAffectedTargets = 1;
             count++;
+            break;   
+        case 63293: // Mimiron - P3Wx2 Laser Barrage
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_CONE_LINE;
+            ++count;
             break;
-        case 64145: // Diminish Power
-        case 63882: // Death Ray Warning Visual
-        case 63886: // Death Ray Damage Visual
-            spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
-            count++;
+        case 64600: // Freya - Nature Bomb (GO Visual)
+            spellInfo->DurationIndex = 38;
+            ++count;
             break;
-        case 64172: // Titanic Storm
-            spellInfo->excludeTargetAuraSpell = 65294; // Empowered
-            count++;
+        case 62056: // Kologarn - some Stone Grip related Spells that have SPELL_ATTR1_IGNORE_IMMUNITY (NYI?)
+        case 63985:
+        case 64224:
+        case 64225:
+            spellInfo->Attributes |= SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
+            ++count;
             break;
-        case 63830: // Malady of the Mind
-        case 63881: // Malady of the Mind proc
-        case 63795: // Psychosis
-            spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_TARGET_ANY;
-            spellInfo->EffectImplicitTargetB[1] = TARGET_UNIT_TARGET_ANY;
-            spellInfo->EffectImplicitTargetB[2] = TARGET_UNIT_TARGET_ANY;
-            count++;
+        case 63025: // XT-002 Gravity Bomb
+        case 64233: // XT-002 Gravity Bomb
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_EXCLUDE_SELF;
+            ++count;
             break;
-        case 63802: // Brain Link
+        case 63802: // Sara Brain Link
             spellInfo->MaxAffectedTargets = 2;
-            spellInfo->EffectRadiusIndex[0] = 12; // 100 yard
-            count++;
-            break;
-        case 63050: // Sanity
-            spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
             count++;
             break;
         // ENDOF ULDUAR SPELLS

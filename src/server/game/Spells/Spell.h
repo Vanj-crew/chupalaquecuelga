@@ -244,11 +244,13 @@ struct SpellValue
         for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
             EffectBasePoints[i] = proto->EffectBasePoints[i];
         MaxAffectedTargets = proto->MaxAffectedTargets;
+        AuraStackAmount = 1;
         RadiusMod = 1.0f;
     }
     int32     EffectBasePoints[3];
     uint32    MaxAffectedTargets;
     float     RadiusMod;
+    uint8     AuraStackAmount;
 };
 
 enum SpellState

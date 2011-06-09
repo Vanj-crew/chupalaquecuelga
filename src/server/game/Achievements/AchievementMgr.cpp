@@ -1950,13 +1950,21 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement))
         return;
 
+    // I know this is already checked in Complete Criterium ... but CompleteAchievement cann also be called by InstanceScript::DoCompleteAchievments and is needet for some RealmFirsts
+    // so we check it again
+    if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_REACH | ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
+    {
+        // someone on this realm has already completed that achievement
+        if (sAchievementMgr->IsRealmCompleted(achievement))
+            return;
+    }
+
     SendAchievementEarned(achievement);
     CompletedAchievementData& ca =  m_completedAchievements[achievement->ID];
     ca.date = time(NULL);
     ca.changed = true;
 
     // don't insert for ACHIEVEMENT_FLAG_REALM_FIRST_KILL since otherwise only the first group member would reach that achievement
-    // TODO: where do set this instead?
     if (!(achievement->flags & ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
         sAchievementMgr->SetRealmCompleted(achievement);
 
@@ -2100,6 +2108,15 @@ bool AchievementMgr::CanUpdateCriteria(AchievementCriteriaEntry const* criteria,
         return false;
 
     return true;
+}
+
+void AchievementMgr::RemoveAchievement(uint32 entry)
+{
+   AchievementCriteriaEntryList const* achievementCriteriaList = sAchievementMgr->GetAchievementCriteriaByAchievement(entry);
+   for (AchievementCriteriaEntryList::const_iterator i = achievementCriteriaList->begin(); i!=achievementCriteriaList->end(); ++i)
+   {
+       RemoveCriteriaProgress(*i);
+   }
 }
 
 //==========================================================

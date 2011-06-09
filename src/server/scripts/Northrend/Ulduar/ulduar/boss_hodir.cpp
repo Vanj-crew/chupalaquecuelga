@@ -17,7 +17,6 @@
 
 /* ScriptData
 SDName: Hodir
-SDAuthor: 
 SD%Complete: 100
 SDComments:
 EndScriptData */
@@ -33,13 +32,14 @@ enum Spells
     SPELL_FLASH_FREEZE_VISUAL                   = 62148,
     SPELL_BITING_COLD                           = 62038,
     SPELL_BITING_COLD_TRIGGERED                 = 62039,
+    SPELL_BITING_COLD_DAMAGE                    = 62188,
     SPELL_FREEZE                                = 62469,
     SPELL_ICICLE                                = 62234,
     SPELL_ICICLE_SNOWDRIFT                      = 62462,
     SPELL_BLOCK_OF_ICE                          = 61969,
     SPELL_BLOCK_OF_ICE_NPC                      = 61990,
     SPELL_FROZEN_KILL                           = 62226,
-    SPELL_ICICLE_FALL                           = 69428,
+    SPELL_ICICLE_FALL                           = 62453,//69428,
     SPELL_FALL_DAMAGE                           = 62236,
     SPELL_FALL_SNOWDRIFT                        = 62460,
     SPELL_BERSERK                               = 47008,
@@ -69,12 +69,12 @@ enum Spells
 
 #define ACTION_FAILED_COOLEST_FRIENDS           1
 
-enum NPCs
+enum Entrys
 {
-    NPC_FLASH_FREEZE_PRE                        = 32926,
-    NPC_FLASH_FREEZE                            = 32938,
-    NPC_ICICLE_TARGET                           = 33174,
-    NPC_HODIR                                   = 32845
+    ENTRY_NPC_FLASH_FREEZE_PRE                        = 32926,
+    ENTRY_NPC_FLASH_FREEZE                            = 32938,
+    ENTRY_NPC_ICICLE_TARGET                           = 33174,
+    ENTRY_NPC_HODIR                                   = 32845
 };
 
 enum Events
@@ -144,10 +144,8 @@ public:
 
     struct boss_hodirAI : public BossAI
     {
-        boss_hodirAI(Creature *pCreature) : BossAI(pCreature, BOSS_HODIR)
+        boss_hodirAI(Creature *pCreature) : BossAI(pCreature, TYPE_HODIR)
         {
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
             me->ApplySpellImmune(0, IMMUNITY_ID, 65280, true);  // Singed
         }
 
@@ -167,7 +165,7 @@ public:
             for (uint8 i = 0; i < RAID_MODE(NORMAL_COUNT, RAID_COUNT); i++)
             {
                 if (Creature* pHelper = me->SummonCreature(addLocations[i].entry,addLocations[i].x,addLocations[i].y,addLocations[i].z,addLocations[i].o))
-                    if (Creature *pIceBlock = pHelper->SummonCreature(NPC_FLASH_FREEZE_PRE,addLocations[i].x,addLocations[i].y,addLocations[i].z,addLocations[i].o))
+                    if (Creature *pIceBlock = pHelper->SummonCreature(ENTRY_NPC_FLASH_FREEZE_PRE,addLocations[i].x,addLocations[i].y,addLocations[i].z,addLocations[i].o))
                         pHelper->AddThreat(me, 5000000.0f);
             }
         }
@@ -204,7 +202,7 @@ public:
                     instance->DoCompleteAchievement(ACHIEVEMENT_THIS_CACHE_WAS_RARE);
                     instance->SetData(DATA_HODIR_RARE_CHEST, GO_STATE_READY);
                 }
-            
+
                 // Chest spawn
                 me->SummonGameObject(RAID_MODE(CACHE_OF_WINTER_10, CACHE_OF_WINTER_25), 1966.43f, -203.906f, 432.687f, -0.91f, 0, 0, 1, 1, 604800);
             }
@@ -215,7 +213,7 @@ public:
             _EnterCombat();
             DoScriptText(SAY_AGGRO, me);
             me->SetReactState(REACT_AGGRESSIVE);
-            DoCast(me, SPELL_BITING_COLD, true);
+            DoCast(me, SPELL_BITING_COLD, false);
             events.ScheduleEvent(EVENT_ICICLE, 2000);
             events.ScheduleEvent(EVENT_FREEZE, 25000);
             events.ScheduleEvent(EVENT_BLOWS, urand(60000, 65000));
@@ -267,7 +265,7 @@ public:
                 {
                     case EVENT_FREEZE:
                         DoCastAOE(SPELL_FREEZE);
-                        events.CancelEvent(EVENT_FREEZE);
+                        events.ScheduleEvent(EVENT_FREEZE, urand(30000, 35000));
                         break;
                     case EVENT_ICICLE:
                         if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
@@ -288,7 +286,6 @@ public:
                         }
                         DoCast(SPELL_FLASH_FREEZE);
                         events.RescheduleEvent(EVENT_ICICLE, 15000);
-                        events.ScheduleEvent(EVENT_FREEZE, urand(30000, 35000));
                         events.ScheduleEvent(EVENT_FLASH_CAST, 50000);
                         events.ScheduleEvent(EVENT_FLASH_EFFECT, 9000);
                         break;
@@ -327,6 +324,9 @@ public:
             {
                 if (Unit *pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                 {
+                    if(!pTarget->ToPlayer())
+                        continue;
+
                     if (pTarget->HasAura(SPELL_BLOCK_OF_ICE))
                     {
                         DoCast(pTarget, SPELL_FROZEN_KILL);
@@ -334,10 +334,10 @@ public:
                     }
                     else
                     {
-                        if (GetClosestCreatureWithEntry(pTarget, NPC_ICICLE_TARGET, 5.0f))
+                        if (GetClosestCreatureWithEntry(pTarget, ENTRY_NPC_ICICLE_TARGET, 5.0f))
                             continue;
                         
-                        else if (Creature *pIceBlock = pTarget->SummonCreature(NPC_FLASH_FREEZE,pTarget->GetPositionX(),pTarget->GetPositionY(),pTarget->GetPositionZ(),0,TEMPSUMMON_TIMED_DESPAWN,105000))
+                        else if (Creature *pIceBlock = pTarget->SummonCreature(ENTRY_NPC_FLASH_FREEZE,pTarget->GetPositionX(),pTarget->GetPositionY(),pTarget->GetPositionZ(),0,TEMPSUMMON_TIMED_DESPAWN,105000))
                         {
                             if (pTarget->GetTypeId() == TYPEID_PLAYER)
                                 CheeseTheFreeze = false;
@@ -401,7 +401,6 @@ public:
 
 };
 
-
 class npc_icicle_snowdrift : public CreatureScript
 {
 public:
@@ -439,9 +438,7 @@ public:
             else IcicleTimer -= diff;
         }
     };
-
 };
-
 
 class npc_snowpacked_icicle : public CreatureScript
 {
@@ -475,14 +472,12 @@ public:
             {
                 if (GameObject *pSnowdrift = me->FindNearestGameObject(194173, 2))
                     me->RemoveGameObject(pSnowdrift, true);
-                me->DespawnOrUnsummon();
+                me->ForcedDespawn();
             }
             else DespawnTimer -= diff;
         }
     };
-
 };
-
 
 class npc_hodir_priest : public CreatureScript
 {
@@ -564,9 +559,7 @@ public:
                 pHodir->AI()->DoAction(ACTION_FAILED_COOLEST_FRIENDS);
         }
     };
-
 };
-
 
 class npc_hodir_shaman : public CreatureScript
 {
@@ -629,9 +622,7 @@ public:
                 pHodir->AI()->DoAction(ACTION_FAILED_COOLEST_FRIENDS);
         }
     };
-
 };
-
 
 class npc_hodir_druid : public CreatureScript
 {
@@ -686,9 +677,7 @@ public:
                 pHodir->AI()->DoAction(ACTION_FAILED_COOLEST_FRIENDS);
         }
     };
-
 };
-
 
 class npc_hodir_mage : public CreatureScript
 {
@@ -737,7 +726,7 @@ public:
         
             if (MeltIceTimer < uiDiff)
             {
-                if (Creature *pShard = me->FindNearestCreature(NPC_FLASH_FREEZE,50,true))
+                if (Creature *pShard = me->FindNearestCreature(ENTRY_NPC_FLASH_FREEZE,50,true))
                 {
                     DoCast(pShard, SPELL_MELT_ICE, true);
                     MeltIceTimer = urand(5000,10000);
@@ -756,9 +745,7 @@ public:
                 pHodir->AI()->DoAction(ACTION_FAILED_COOLEST_FRIENDS);
         }
     };
-
 };
-
 
 class npc_toasty_fire : public CreatureScript
 {
@@ -774,7 +761,6 @@ public:
     {
         npc_toasty_fireAI(Creature *pCreature) : Scripted_NoMovementAI(pCreature)
         {
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
             me->SetReactState(REACT_PASSIVE);
             me->SetDisplayId(15880);
@@ -792,7 +778,7 @@ public:
             {
                 if (GameObject *pFire = me->FindNearestGameObject(194300, 4))
                     me->RemoveGameObject(pFire, true);
-                me->DespawnOrUnsummon();
+                me->ForcedDespawn();
             }
         }
 
@@ -802,9 +788,7 @@ public:
                 me->RemoveGameObject(pFire, true);
         }
     };
-
 };
-
 
 class npc_flash_freeze : public CreatureScript
 {
@@ -821,9 +805,7 @@ public:
         npc_flash_freezeAI(Creature *pCreature) : Scripted_NoMovementAI(pCreature)
         {
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_PACIFIED);
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-            me->SetDisplayId(25865);
+            me->setFaction(25865);
             me->setFaction(14);
         }
 
@@ -831,7 +813,7 @@ public:
         {
             if (me->ToTempSummon()->GetSummoner())
             {
-                if (me->GetEntry() == NPC_FLASH_FREEZE_PRE)
+                if (me->GetEntry() == ENTRY_NPC_FLASH_FREEZE_PRE)
                     DoCast(SPELL_BLOCK_OF_ICE_NPC);
                 else
                     DoCast(SPELL_BLOCK_OF_ICE);
@@ -855,18 +837,18 @@ public:
                 return;
             }
 
-            if (me->GetEntry() == NPC_FLASH_FREEZE_PRE && !me->ToTempSummon()->GetSummoner()->HasAura(SPELL_BLOCK_OF_ICE_NPC))
+            if (me->GetEntry() == ENTRY_NPC_FLASH_FREEZE_PRE && !me->ToTempSummon()->GetSummoner()->HasAura(SPELL_BLOCK_OF_ICE_NPC))
                 DoCast(SPELL_BLOCK_OF_ICE_NPC);
         }
 
         void DamageTaken(Unit* pKiller, uint32 &damage)
         {
-            if (me->GetEntry() == NPC_FLASH_FREEZE_PRE)
+            if (me->GetEntry() == ENTRY_NPC_FLASH_FREEZE_PRE)
             {
                 if (pKiller && pKiller->GetTypeId() == TYPEID_PLAYER)
-                    if (Creature* pHodir = me->FindNearestCreature(NPC_HODIR, 40, true))
+                    if (Creature* pHodir = me->FindNearestCreature(NPC_HODIR, 80, true))
                         if (!pHodir->isInCombat())
-                            pHodir->AI()->DoZoneInCombat();
+                            pHodir->AI()->AttackStart(pKiller);
             }
         }
 
@@ -876,9 +858,79 @@ public:
                 me->ToTempSummon()->GetSummoner()->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, false);
         }
     };
-
 };
 
+class spell_biting_cold : public SpellScriptLoader
+{
+    public:
+        spell_biting_cold() : SpellScriptLoader("spell_biting_cold") { }
+
+    class spell_biting_cold_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_biting_cold_AuraScript)
+
+        void HandlePeriodicDummy(AuraEffect const* aurEff)
+        {
+            PreventDefaultAction();
+            if (Unit* trigger = GetTarget())
+            {
+                if(aurEff->GetSpellProto()->Id == SPELL_BITING_COLD)
+                {
+                    if(trigger->ToPlayer())
+                    {
+                        if(!trigger->HasAura(62821)) // Not Triggered if in Toasty Fire
+                            trigger->CastSpell(trigger,SPELL_BITING_COLD_TRIGGERED,true,0,0,GetCasterGUID());
+                    }
+                }
+                else if(aurEff->GetSpellProto()->Id == SPELL_BITING_COLD_TRIGGERED)
+                {
+                    int32 damage = trigger->GetAuraCount(SPELL_BITING_COLD_TRIGGERED);
+                    damage *= 400;
+                    trigger->CastCustomSpell(trigger,SPELL_BITING_COLD_DAMAGE, &damage, NULL, NULL, true, 0, 0, GetCasterGUID());
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_biting_cold_AuraScript::HandlePeriodicDummy, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript *GetAuraScript() const
+    {
+        return new spell_biting_cold_AuraScript();
+    }
+};
+
+/*
+-- Hodir
+UPDATE `creature_template` SET `mechanic_immune_mask` = 650854239, `flags_extra` = 1, `ScriptName` = 'boss_hodir' WHERE `entry` = 32845;
+UPDATE `creature_template` SET `equipment_id` = 1843, `mechanic_immune_mask` = 650854239, `flags_extra` = 1 WHERE `entry` = 32846;
+
+-- Hodir npcs
+UPDATE `creature_template` SET `ScriptName` = 'npc_hodir_priest' WHERE `entry` IN (32897, 33326, 32948, 33330);
+UPDATE `creature_template` SET `ScriptName` = 'npc_hodir_shaman' WHERE `entry` IN (33328, 32901, 33332, 32950);
+UPDATE `creature_template` SET `ScriptName` = 'npc_hodir_druid' WHERE `entry` IN (33325, 32900, 32941, 33333);
+UPDATE `creature_template` SET `ScriptName` = 'npc_hodir_mage' WHERE `entry` IN (32893, 33327, 33331, 32946);
+UPDATE `creature_template` SET `ScriptName` = 'npc_toasty_fire' WHERE `entry` = 33342;
+UPDATE `creature_template` SET `ScriptName` = 'npc_icicle' WHERE `entry` = 33169;
+UPDATE `creature_template` SET `ScriptName` = 'npc_icicle_snowdrift' WHERE `entry` = 33173;
+UPDATE `creature_template` SET `ScriptName` = 'npc_snowpacked_icicle' WHERE `entry` = 33174;
+UPDATE `creature_template` SET `difficulty_entry_1` = 33352, `mechanic_immune_mask` = 612597599, `ScriptName` = 'npc_flash_freeze' WHERE `entry` = 32926;
+UPDATE `creature_template` SET `difficulty_entry_1` = 33353, `mechanic_immune_mask` = 612597599, `ScriptName` = 'npc_flash_freeze' WHERE `entry` = 32938;
+UPDATE `creature_template` SET `mechanic_immune_mask` = 612597599 WHERE `entry` IN (33352, 33353);
+UPDATE `gameobject_template` SET `flags` = 4 WHERE `entry` = 194173;
+
+DELETE FROM spell_script_names WHERE spell_id IN (62038,62039);
+INSERT INTO spell_script_names (spell_id,Scriptname)
+VALUES
+(62038,'spell_biting_cold'),
+(62039,'spell_biting_cold');
+
+-- Cleanup
+DELETE FROM `creature` WHERE `id` IN (32950, 32941, 32948, 32946, 32938);
+*/
 void AddSC_boss_hodir()
 {
     new boss_hodir();
@@ -891,4 +943,5 @@ void AddSC_boss_hodir()
     new npc_hodir_mage();
     new npc_toasty_fire();
     new npc_flash_freeze();
+    new spell_biting_cold();
 }

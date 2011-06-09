@@ -15,72 +15,80 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Auriaya
-Author: 
-SD%Complete: 100%
-SDComment:
-EndScriptData */
-
-#include "ScriptPCH.h"
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
 #include "ulduar.h"
+
+#define MODEL_INVISIBLE    11686
 
 enum Spells
 {
-    // Auriaya
-    SPELL_SETINEL_BLAST                         = 64389,
-    SPELL_SONIC_SCREECH                         = 64422,
+    //Auriaya 
     SPELL_TERRIFYING_SCREECH                    = 64386,
+    SPELL_SENTINEL_BLAST_10                     = 64389,
+    SPELL_SENTINEL_BLAST_25                     = 64678,
+    SPELL_SONIC_SCREECH_10                      = 64422,
+    SPELL_SONIC_SCREECH_25                      = 64688,
     SPELL_SUMMON_SWARMING_GUARDIAN              = 64396,
-    SPELL_ACTIVATE_DEFENDER                     = 64449,
-    SPELL_DEFENDER_TRIGGER                      = 64448,
-    SPELL_SUMMON_DEFENDER                       = 64447,
+    SPELL_FERAL_DEFENDER_TRIGGER                = 64449,
+    SPELL_FERAL_DEFENDER_SUMMON                 = 64447,
     SPELL_BERSERK                               = 47008,
-    // Feral Defender
-    SPELL_FERAL_RUSH                            = 64496,
-    SPELL_FERAL_POUNCE                          = 64478,
-    SPELL_SEEPING_ESSENCE                       = 64458,
-    SPELL_SUMMON_ESSENCE                        = 64457,
+
+    //Feral Defender
     SPELL_FERAL_ESSENCE                         = 64455,
-    // Sanctum Sentry
-    SPELL_SAVAGE_POUNCE                         = 64666,
-    SPELL_RIP_FLESH                             = 64375,
-    SPELL_STRENGHT_PACK                         = 64381
-};
+    SPELL_FERAL_RUSH_10                         = 64496,
+    SPELL_FERAL_RUSH_25                         = 64674,
+    SPELL_FERAL_POUNCE_10                       = 64478,
+    SPELL_FERAL_POUNCE_25                       = 64669,
+    SPELL_SLEEPING_FERAL_ESSENCE_10             = 64458,
+    SPELL_SLEEPING_FERAL_ESSENCE_25             = 64676,
 
-#define NPC_SANCTUM_SENTRY                      34014
-
-// Achievements
-#define ACHIEVEMENT_CRAZY_CAT_LADY              RAID_MODE(3006, 3007)
-#define ACHIEVEMENT_NINE_LIVES                  RAID_MODE(3076, 3077)
-
-enum Events
-{
-    EVENT_NONE,
-    EVENT_SCREECH,
-    EVENT_BLAST,
-    EVENT_TERRIFYING,
-    EVENT_SUMMON,
-    EVENT_DEFENDER,
-    EVENT_BERSERK
+    //Sanctum Sentry
+    SPELL_SAVAGE_POUNCE_10                      = 64666,
+    SPELL_SAVAGE_POUNCE_25                      = 64374,
+    SPELL_RIP_FLESH_10                          = 64375,
+    SPELL_RIP_FLESH_25                          = 64667,
+    SPELL_STRENGTH_OF_THE_PACK                  = 64369,
+    SPELL_STRENGTH_OF_THE_PACK_TRIGGERED        = 64381  
 };
 
 enum Yells
 {
-    SAY_AGGRO                                   = -1603050,
-    SAY_SLAY_1                                  = -1603051,
-    SAY_SLAY_2                                  = -1603052,
-    SAY_DEATH                                   = -1603053,
-    SAY_BERSERK                                 = -1603054
+    SAY_AGGRO                                    = -1603050,
+    SAY_SLAY_1                                   = -1603051,
+    SAY_SLAY_2                                   = -1603052,
+    SAY_DEATH                                    = -1603053,
+    SAY_BERSERK                                  = -1603054,
 };
 
-#define EMOTE_FEAR                              "Auriaya begins to cast Terrifying Screech."
-#define EMOTE_DEFENDER                          "Auriaya begins to activate the Feral Defender!"
-
-enum Actions
+enum Creatures
 {
-    ACTION_CRAZY_CAT_LADY                       = 0,
-    ACTION_NINE_LIVES                           = 1
+    ENTRY_CREATURE_AURIAYA_SEEPING_ESSENCE_STALKER        = 34098,
+    ENTRY_CREATURE_FERAL_DEFENDER                         = 34035,
+    ENTRY_CREATURE_AURIAYA                                = 33515,
+    ENTRY_CREATURE_SANCTUM_SENTRY                         = 34014
+};
+
+enum Achievements
+{
+    ACHIEV_AURIAYA_KILLS_10                               = 2868,
+    ACHIEV_AURIAYA_KILLS_25                               = 2882,
+    ACHIEV_CRAZY_CAT_LADY_10                              = 3006,
+    ACHIEV_CRAZY_CAT_LADY_25                              = 3007,
+    ACHIEV_NINE_LIVES_10                                  = 3076,
+    ACHIEV_NINE_LIVES_25                                  = 3077,
+};
+
+enum Events
+{
+    EVENT_NONE,
+    EVENT_TERRIFYING_SCREECH,
+    EVENT_SONIC_SCREECH,
+    EVENT_GUARDIAN_SWARM,
+    EVENT_SENTINEL_BLAST,
+    EVENT_FERAL_DEFENDER_SUMMON,
+    EVENT_FERAL_DEFENDER_RESURRECTION,
+    EVENT_BERSERK
 };
 
 class boss_auriaya : public CreatureScript
@@ -88,73 +96,97 @@ class boss_auriaya : public CreatureScript
 public:
     boss_auriaya() : CreatureScript("boss_auriaya") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_auriaya_AI (pCreature);
+        return new boss_auriayaAI(creature);
     }
 
-    struct boss_auriaya_AI : public BossAI
+    struct boss_auriayaAI : public BossAI
     {
-        boss_auriaya_AI(Creature *pCreature) : BossAI(pCreature, BOSS_AURIAYA)
+        boss_auriayaAI(Creature* creature) : BossAI(creature, TYPE_AURIAYA)
         {
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+            /* set sentinel blast duration to 5 seconds, dont interrupt by taking damage */
+            SpellEntry* tempSpell;
+            tempSpell = GET_SPELL(RAID_MODE(SPELL_SENTINEL_BLAST_10, SPELL_SENTINEL_BLAST_25));
+            if (tempSpell)
+            {
+                tempSpell->DurationIndex = 28;
+                tempSpell->ChannelInterruptFlags &= ~AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
+            }
         }
 
-        bool SentryDead;
-        uint32 LivesCount;
+        uint8 defenderLifeCount;
+        bool crazyCatLady;
 
         void Reset()
         {
             _Reset();
-        
-            if (Creature* Sentry = me->SummonCreature(NPC_SANCTUM_SENTRY, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
-                Sentry->GetMotionMaster()->MoveFollow(me, 0.5, 1.5, MOTION_SLOT_ACTIVE);
-            if (Creature* Sentry = me->SummonCreature(NPC_SANCTUM_SENTRY, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
-                Sentry->GetMotionMaster()->MoveFollow(me, 0.5, -1.5, MOTION_SLOT_ACTIVE);
-        
+            crazyCatLady = true;
+            defenderLifeCount = 9;
+
+            while (Creature* sentry = me->FindNearestCreature(ENTRY_CREATURE_SANCTUM_SENTRY, 50000, false))
+                sentry->Respawn();
+
             if (GetDifficulty() == RAID_DIFFICULTY_25MAN_NORMAL)
-            {
-                if (Creature* Sentry = me->SummonCreature(NPC_SANCTUM_SENTRY, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
-                    Sentry->GetMotionMaster()->MoveFollow(me, -2.5, 1.5, MOTION_SLOT_ACTIVE);
-                if (Creature* Sentry = me->SummonCreature(NPC_SANCTUM_SENTRY, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
-                    Sentry->GetMotionMaster()->MoveFollow(me, -2.5, -1.5, MOTION_SLOT_ACTIVE);
-            }
+                for (uint8 i = 0; i < 2; ++i)
+                    if (Creature* sentry = me->SummonCreature(ENTRY_CREATURE_SANCTUM_SENTRY, *me, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                        sentry->GetMotionMaster()->MoveFollow(me, 1.0f, M_PI*(i + 0.5f));
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* who)
         {
+            DoScriptText(SAY_AGGRO, me);
             _EnterCombat();
-            DoScriptText(SAY_AGGRO,me);
-            SentryDead = false;
-            LivesCount = 0;
-            events.ScheduleEvent(EVENT_SCREECH, 60000);
-            events.ScheduleEvent(EVENT_BLAST, 35500);
-            events.ScheduleEvent(EVENT_TERRIFYING, 35000);
-            events.ScheduleEvent(EVENT_DEFENDER, 65000);
-            events.ScheduleEvent(EVENT_SUMMON, 120000);
+
+            std::list<Creature*> _sentrys;
+            GetCreatureListWithEntryInGrid(_sentrys, me, ENTRY_CREATURE_SANCTUM_SENTRY, 200.0f);
+            if (!_sentrys.empty())
+                for (std::list<Creature*>::iterator iter = _sentrys.begin(); iter != _sentrys.end(); ++iter)
+                {
+                    (*iter)->AI()->DoAttackerAreaInCombat((*iter), 100.0f);
+                    (*iter)->AI()->AttackStart(who);
+                }
+
+            events.ScheduleEvent(EVENT_TERRIFYING_SCREECH, 40000);
+            events.ScheduleEvent(EVENT_SONIC_SCREECH, 60000);
+            events.ScheduleEvent(EVENT_GUARDIAN_SWARM, 30000);
+            events.ScheduleEvent(EVENT_SENTINEL_BLAST, 20000);
+            events.ScheduleEvent(EVENT_FERAL_DEFENDER_SUMMON, 60000);
             events.ScheduleEvent(EVENT_BERSERK, 600000);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
-            if (!(rand()%5))
-                DoScriptText(RAND(SAY_SLAY_1,SAY_SLAY_2), me);
+            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2), me);
         }
 
         void JustDied(Unit * /*victim*/)
         {
-            _JustDied();
             DoScriptText(SAY_DEATH, me);
-        
+            _JustDied();
+
             if (instance)
             {
-                // Crazy Cat Lady
-                if (!SentryDead)
-                    instance->DoCompleteAchievement(ACHIEVEMENT_CRAZY_CAT_LADY);
-                // Nine Lives
-                if (LivesCount > 8)
-                    instance->DoCompleteAchievement(ACHIEVEMENT_NINE_LIVES);
+                if (defenderLifeCount == 0)
+                    instance->DoCompleteAchievement(RAID_MODE(ACHIEV_NINE_LIVES_10, ACHIEV_NINE_LIVES_25));
+                if (crazyCatLady)
+                    instance->DoCompleteAchievement(RAID_MODE(ACHIEV_CRAZY_CAT_LADY_10, ACHIEV_CRAZY_CAT_LADY_25));
+                instance->DoCompleteAchievement(RAID_MODE(ACHIEV_AURIAYA_KILLS_10, ACHIEV_AURIAYA_KILLS_25));
+            }
+        }
+
+        void MoveInLineOfSight(Unit * /*who*/) { }
+
+        void SummonedCreatureDies(Creature* summon, Unit * /*killer*/)
+        {
+            switch (summon->GetEntry())
+            {
+                case ENTRY_CREATURE_FERAL_DEFENDER:
+                    me->SummonCreature(ENTRY_CREATURE_AURIAYA_SEEPING_ESSENCE_STALKER, *summon);
+                    events.ScheduleEvent(EVENT_FERAL_DEFENDER_RESURRECTION, 30000);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -163,358 +195,268 @@ public:
             if (!UpdateVictim())
                 return;
 
+            _DoAggroPulse(diff);
             events.Update(diff);
 
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while(uint32 eventId = events.ExecuteEvent())
+            while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
-                    case EVENT_SCREECH:
-                        DoCast(SPELL_SONIC_SCREECH);
-                        events.ScheduleEvent(EVENT_SCREECH, 25000);
-                        break;
-                    case EVENT_TERRIFYING:
-                        me->MonsterTextEmote(EMOTE_FEAR, 0, true);
+                    case EVENT_TERRIFYING_SCREECH:
                         DoCast(SPELL_TERRIFYING_SCREECH);
-                        events.ScheduleEvent(EVENT_TERRIFYING, 35000);
-                        break;
-                    case EVENT_BLAST:
-                        DoCastAOE(SPELL_SETINEL_BLAST);
-                        events.ScheduleEvent(EVENT_BLAST, 35000);
-                        break;
-                    case EVENT_DEFENDER:
-                        me->MonsterTextEmote(EMOTE_DEFENDER, 0, true);
-                        DoCast(SPELL_DEFENDER_TRIGGER);
-                        DoCast(SPELL_ACTIVATE_DEFENDER);
-                        events.CancelEvent(EVENT_DEFENDER);
-                        break;
-                    case EVENT_SUMMON:
-                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 60, true))
-                            DoCast(pTarget, SPELL_SUMMON_SWARMING_GUARDIAN);
-                        events.ScheduleEvent(EVENT_SUMMON, 35000);
-                        break;
+                        events.ScheduleEvent(EVENT_TERRIFYING_SCREECH, 35000);
+                        return;
+                    case EVENT_SONIC_SCREECH:
+                        DoCastVictim(RAID_MODE(SPELL_SONIC_SCREECH_10, SPELL_SONIC_SCREECH_25));
+                        events.ScheduleEvent(EVENT_SONIC_SCREECH, 27000);
+                        return;
+                    case EVENT_GUARDIAN_SWARM:
+                        DoCastVictim(SPELL_SUMMON_SWARMING_GUARDIAN);
+                        events.ScheduleEvent(EVENT_GUARDIAN_SWARM, 35000);
+                        return;
+                    case EVENT_SENTINEL_BLAST:
+                        DoCast(RAID_MODE(SPELL_SENTINEL_BLAST_10, SPELL_SENTINEL_BLAST_25));
+                        events.ScheduleEvent(EVENT_SENTINEL_BLAST, 25000);
+                        return;
+                    case EVENT_FERAL_DEFENDER_SUMMON:
+                        DoCast(SPELL_FERAL_DEFENDER_SUMMON);
+                        if (Creature* defender = me->FindNearestCreature(ENTRY_CREATURE_FERAL_DEFENDER, 100, true))
+                        {
+                            defender->AddAura(SPELL_FERAL_ESSENCE, defender);
+                            defender->SetAuraStack(SPELL_FERAL_ESSENCE, defender, defenderLifeCount);
+                        }
+                        return;
+                    case EVENT_FERAL_DEFENDER_RESURRECTION:
+                        if (Creature* defender = me->FindNearestCreature(ENTRY_CREATURE_FERAL_DEFENDER, 15000, false))
+                        {
+                            if (defenderLifeCount > 0)
+                            {
+                                defender->Respawn();
+                                defender->SetInCombatWithZone();
+                                defenderLifeCount--;
+                                defender->AddAura(SPELL_FERAL_ESSENCE, defender);
+                                defender->SetAuraStack(SPELL_FERAL_ESSENCE, defender, defenderLifeCount);
+                            }
+                        }
+                        return;
                     case EVENT_BERSERK:
-                        DoCast(me, SPELL_BERSERK, true);
                         DoScriptText(SAY_BERSERK, me);
-                        events.CancelEvent(EVENT_BERSERK);
+                        DoCast(me, SPELL_BERSERK, true);
+                        return;
+                    default:
                         break;
                 }
             }
 
             DoMeleeAttackIfReady();
         }
-
-        void DoAction(const int32 action)
-        {
-            switch (action)
-            {
-                case ACTION_CRAZY_CAT_LADY:
-                    SentryDead = true;
-                    break;
-                case ACTION_NINE_LIVES:
-                    LivesCount++;
-                    break;
-            }
-        }
     };
-
 };
 
-
-class npc_feral_defender_trigger : public CreatureScript
+class mob_feral_defender: public CreatureScript
 {
 public:
-    npc_feral_defender_trigger() : CreatureScript("npc_feral_defender_trigger") { }
+    mob_feral_defender() : CreatureScript("mob_feral_defender") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_feral_defender_triggerAI (pCreature);
+        return new mob_feral_defenderAI(creature);
     }
 
-    struct npc_feral_defender_triggerAI : public Scripted_NoMovementAI
+    struct mob_feral_defenderAI : public ScriptedAI
     {
-        npc_feral_defender_triggerAI(Creature *pCreature) : Scripted_NoMovementAI(pCreature)
-        {
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED);
-            me->SetDisplayId(11686);
-            me->setFaction(16);
-        }
+        mob_feral_defenderAI(Creature* creature) : ScriptedAI(creature) { }
 
-        uint32 SummonTimer;
+        uint32 feralRushTimer;
+        uint32 feralPounceTimer;
 
         void Reset()
         {
-            SummonTimer = 3000;
+            feralRushTimer = 4000;
+            feralPounceTimer = 6000;
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
                 return;
 
-            if (SummonTimer <= uiDiff)
+            if (feralRushTimer <= diff)
             {
-                DoCast(me, SPELL_SUMMON_DEFENDER);
-                SummonTimer = 30000;
-            } 
-            else SummonTimer -= uiDiff;
-        }
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(target, RAID_MODE(SPELL_FERAL_RUSH_10, SPELL_FERAL_RUSH_25));
+                feralRushTimer = 5000;
+            }
+            else feralRushTimer -= diff;
 
-        void JustSummoned(Creature *summon)
-        {
-            summon->AI()->DoZoneInCombat();
-        }
-    };
-
-};
-
-
-class npc_feral_defender : public CreatureScript
-{
-public:
-    npc_feral_defender() : CreatureScript("npc_feral_defender") { }
-
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new npc_feral_defenderAI (pCreature);
-    }
-
-    struct npc_feral_defenderAI : public ScriptedAI
-    {
-        npc_feral_defenderAI(Creature *pCreature) : ScriptedAI(pCreature)
-        {
-            pInstance = pCreature->GetInstanceScript();
-        }
-
-        InstanceScript* pInstance;
-
-        uint32 PounceTimer;
-        uint32 RushTimer;
-        uint32 RessTimer;
-        uint32 Lifes;
-
-        void Reset()
-        {
-            PounceTimer = 5000;
-            RushTimer = 12000;
-            Lifes = 8;
-            RessTimer = 999999;
-        
-            me->SetAuraStack(SPELL_FERAL_ESSENCE, me, Lifes);
-        }
-
-        void UpdateAI(const uint32 uiDiff)
-        {
-            if (!UpdateVictim())
-                me->DespawnOrUnsummon();
-            
-            if (pInstance && pInstance->GetBossState(BOSS_AURIAYA) != IN_PROGRESS)
-                me->DespawnOrUnsummon();
-
-            if (PounceTimer <= uiDiff)
+            if (feralPounceTimer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 60, true))
-                {
-                    me->AddThreat(pTarget, 100.0f);
-                    me->AI()->AttackStart(pTarget);
-                    DoCast(pTarget, SPELL_FERAL_POUNCE);
-                }
-                PounceTimer = urand(15000, 20000);
-            } 
-            else PounceTimer -= uiDiff;
-        
-            if (RushTimer <= uiDiff)
-            {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 60, true))
-                {
-                    me->AddThreat(pTarget, 100.0f);
-                    me->AI()->AttackStart(pTarget);
-                    DoCast(pTarget, SPELL_FERAL_RUSH);
-                }
-                RushTimer = urand(15000, 20000);
-            } 
-            else RushTimer -= uiDiff;
-        
-            if (RessTimer <= uiDiff)
-            {
-                me->SetStandState(UNIT_STAND_STATE_STAND);
-                for (uint8 i = 0; i < Lifes; ++i)
-                    DoCast(me, SPELL_FERAL_ESSENCE);
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
-                me->SetReactState(REACT_AGGRESSIVE);
-                RessTimer = 999999;
-                DoZoneInCombat();
-            } 
-            else RessTimer -= uiDiff;
-        
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(target, RAID_MODE(SPELL_FERAL_POUNCE_10, SPELL_FERAL_POUNCE_25));
+                feralPounceTimer = 5000;
+            }
+            else feralPounceTimer -= diff;
+
             DoMeleeAttackIfReady();
         }
-
-        void DamageTaken(Unit* /*pKiller*/, uint32 &damage)
-        {
-            if (damage >= me->GetHealth())
-            {
-                if (me->HasAura(SPELL_FERAL_ESSENCE))
-                {
-                    damage = 0;
-                    DoCast(me, SPELL_SUMMON_ESSENCE);
-                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
-                    me->SetReactState(REACT_PASSIVE);
-                    me->SetStandState(UNIT_STAND_STATE_DEAD);
-                    me->SetFullHealth();
-                    me->RemoveAllAuras();
-                    me->AttackStop();
-                    Lifes--;
-                    PounceTimer = 35000;
-                    RushTimer = 42000;
-                    RessTimer = 30000;
-                    if (pInstance)
-                        if (Creature *pAuriaya = me->GetCreature(*me, pInstance->GetData64(DATA_AURIAYA)))
-                            pAuriaya->AI()->DoAction(ACTION_NINE_LIVES);
-                }
-            }
-        }
     };
-
 };
 
-
-class npc_sanctum_sentry : public CreatureScript
+class mob_sanctum_sentry: public CreatureScript
 {
 public:
-    npc_sanctum_sentry() : CreatureScript("npc_sanctum_sentry") { }
+    mob_sanctum_sentry() : CreatureScript("mob_sanctum_sentry") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_sanctum_sentryAI (pCreature);
+        return new mob_sanctum_sentryAI(creature);
     }
 
-    struct npc_sanctum_sentryAI : public ScriptedAI
+    struct mob_sanctum_sentryAI : public ScriptedAI
     {
-        npc_sanctum_sentryAI(Creature *pCreature) : ScriptedAI(pCreature)
+        mob_sanctum_sentryAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = pCreature->GetInstanceScript();
+            _instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
-
-        uint32 RipTimer;
-        uint32 PounceTimer;
-        uint32 CheckTimer;
+        InstanceScript* _instance;
+        uint32 ripFleshTimer;
 
         void Reset()
         {
-            RipTimer = urand(4000, 8000);
-            PounceTimer = urand(20000, 30000);
-            CheckTimer = 1000;
+            ripFleshTimer = 10000;
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void EnterCombat(Unit * /*who*/)
+        {
+            me->AddAura(SPELL_STRENGTH_OF_THE_PACK, me);
+            DoCast(RAID_MODE(SPELL_SAVAGE_POUNCE_10, SPELL_SAVAGE_POUNCE_25));
+        }
+
+        void JustDied(Unit * /*victim*/)
+        {
+            if (Creature* auriaya = Unit::GetCreature(*me, _instance ? _instance->GetData64(TYPE_AURIAYA) : 0))
+                CAST_AI(boss_auriaya::boss_auriayaAI, auriaya->AI())->crazyCatLady = false;
+        }
+
+        void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
                 return;
 
-            if (RipTimer <= uiDiff)
+            if (ripFleshTimer <= diff)
             {
-                DoCastVictim(SPELL_RIP_FLESH);
-                RipTimer = urand(14000, 18000);
+                DoCastVictim(RAID_MODE(SPELL_RIP_FLESH_10, SPELL_RIP_FLESH_25));
+                ripFleshTimer = 10000;
             }
-            else RipTimer -= uiDiff;
-        
-            if (PounceTimer <= uiDiff)
-            {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 60, true))
-                {
-                    me->AddThreat(pTarget, 100.0f);
-                    me->AI()->AttackStart(pTarget);
-                    DoCast(pTarget, SPELL_SAVAGE_POUNCE);
-                }
-                PounceTimer = urand(20000, 30000);
-            }
-            else PounceTimer -= uiDiff;
-        
-            // Increases the damage of all Sanctum Sentries within 10 yards by 30%
-            if (CheckTimer < uiDiff)
-            {
-                uint8 aura = NULL;
-                std::list<Creature*> Sanctum;
-                GetCreatureListWithEntryInGrid(Sanctum, me, NPC_SANCTUM_SENTRY, 10.0f);
-                for(std::list<Creature*>::iterator itr = Sanctum.begin(); itr != Sanctum.end(); ++itr)
-                {
-                    Creature *Sentry = *itr;
-
-                    if (!Sentry)
-                        continue;
-
-                    if (Sentry->isAlive() && me != Sentry)
-                        aura++;
-                }
-
-                if (aura)
-                    me->SetAuraStack(SPELL_STRENGHT_PACK, me, aura);
-
-                CheckTimer = 2000;
-            }
-            else CheckTimer -= uiDiff;
+            else ripFleshTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
-
-        void JustDied(Unit* /*victim*/)
-        {
-            if (pInstance)
-                if (Creature *pAuriaya = me->GetCreature(*me, pInstance->GetData64(DATA_AURIAYA)))
-                    pAuriaya->AI()->DoAction(ACTION_CRAZY_CAT_LADY);
-        }
     };
-
 };
 
-
-class npc_seeping_trigger : public CreatureScript
+class mob_seeping_essence_stalker: public CreatureScript
 {
 public:
-    npc_seeping_trigger() : CreatureScript("npc_seeping_trigger") { }
+    mob_seeping_essence_stalker() : CreatureScript("mob_seeping_essence_stalker") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_seeping_triggerAI (pCreature);
+        return new mob_seeping_essence_stalkerAI(creature);
     }
 
-    struct npc_seeping_triggerAI : public Scripted_NoMovementAI
+    struct mob_seeping_essence_stalkerAI : public ScriptedAI
     {
-        npc_seeping_triggerAI(Creature *pCreature) : Scripted_NoMovementAI(pCreature)
-        {
-            pInstance = pCreature->GetInstanceScript();
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED);
-            me->SetDisplayId(11686);
-        }
-
-        InstanceScript* pInstance;
+        mob_seeping_essence_stalkerAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset()
         {
-            DoCast(me, SPELL_SEEPING_ESSENCE);
+            me->SetDisplayId(MODEL_INVISIBLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            DoCast(RAID_MODE(SPELL_SLEEPING_FERAL_ESSENCE_10, SPELL_SLEEPING_FERAL_ESSENCE_25));
         }
-    
-        void UpdateAI(const uint32 uiDiff)
+
+        void UpdateAI(const uint32 diff) { }
+    };
+};
+
+class SentryIsDead
+{
+    public:
+        SentryIsDead() { }
+
+        bool operator()(Creature* creature)
         {
-            if (pInstance && pInstance->GetBossState(BOSS_AURIAYA) != IN_PROGRESS)
-                me->DespawnOrUnsummon();
+            return !creature->isAlive();
+        }
+};
+
+class spell_strength_of_the_pack : public SpellScriptLoader
+{
+public:
+    spell_strength_of_the_pack() : SpellScriptLoader("spell_strength_of_the_pack") { }
+
+    class spell_strength_of_the_pack_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_strength_of_the_pack_AuraScript)
+
+        void HandleEffectApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+        {
+            std::list<Unit*> targetList;
+            std::list<Creature*> sentryList;
+            aurEff->GetTargetList(targetList);
+
+            for (std::list<Unit*>::iterator iter = targetList.begin(); iter != targetList.end(); ++iter)
+            {
+                if ((*iter)->ToCreature())
+                {
+                    if ((*iter)->GetEntry() != ENTRY_CREATURE_SANCTUM_SENTRY)
+                    {
+                        (*iter)->RemoveAurasDueToSpell(GetId());
+                    }
+                    else
+                    {
+                        (*iter)->GetCreatureListWithEntryInGrid(sentryList, ENTRY_CREATURE_SANCTUM_SENTRY, 10.0f);
+                        sentryList.remove_if(SentryIsDead());
+
+                        if (sentryList.size() < 2)
+                            (*iter)->RemoveAurasDueToSpell(GetId());
+                        else
+                            (*iter)->SetAuraStack(GetId(), (*iter), sentryList.size());
+                    }
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffectApply += AuraEffectApplyFn(spell_strength_of_the_pack_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL);
         }
     };
 
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_strength_of_the_pack_AuraScript();
+    }
 };
 
+/*
+UPDATE creature_template SET ScriptName = "boss_auriaya" WHERE Entry = 33515;
+UPDATE creature_template SET ScriptName = "mob_feral_defender" WHERE Entry = 34035;
+UPDATE creature_template SET ScriptName = "mob_sanctum_sentry" WHERE Entry = 34014;
+UPDATE creature_template SET ScriptName = "mob_seeping_essence_stalker" WHERE Entry = 34098;
+*/
 
 void AddSC_boss_auriaya()
 {
     new boss_auriaya();
-    new npc_feral_defender_trigger();
-    new npc_feral_defender();
-    new npc_sanctum_sentry();
-    new npc_seeping_trigger();
+    new mob_feral_defender();
+    new mob_seeping_essence_stalker();
+    new mob_sanctum_sentry();
+    new spell_strength_of_the_pack();
 }

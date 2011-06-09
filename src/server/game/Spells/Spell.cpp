@@ -941,9 +941,6 @@ void Spell::AddUnitTarget(Unit* pVictim, uint32 effIndex)
 
     // Check for effect immune skip if immuned
     bool immuned = pVictim->IsImmunedToSpellEffect(m_spellInfo, effIndex);
-    // Saronite Vapors Hack
-    if (m_spellInfo->Id == 63337)
-        immuned = false;
 
     uint64 targetGUID = pVictim->GetGUID();
 
@@ -1538,6 +1535,9 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit *unit, const uint32 effectMask, bool 
                 m_originalCaster,(aurSpellInfo == m_spellInfo)? &m_spellValue->EffectBasePoints[0] : &basePoints[0], m_CastItem);
             if (m_spellAura)
             {
+                // Set aura stack amount to desired value
+                m_spellAura->SetStackAmount(m_spellValue->AuraStackAmount);
+
                 // Now Reduce spell duration using data received at spell hit
                 int32 duration = m_spellAura->GetMaxDuration();
                 int32 limitduration = GetDiminishingReturnsLimitDuration(m_diminishGroup,aurSpellInfo);
@@ -2390,7 +2390,17 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
 
                     if (WorldObject *target = SearchNearbyTarget(range, SPELL_TARGETS_ENTRY, SpellEffIndex(i)))
+                    {
                         m_targets.setDst(*target);
+                        
+                        // Cosmic Smash Hack
+                        if (Unit* _target = target->ToUnit())
+                        {
+                            std::list<Unit*> unitList;
+                            unitList.push_back(_target);
+                            CallScriptAfterUnitTargetSelectHandlers(unitList, SpellEffIndex(i));
+                        }
+                    }
                     break;
                 }
             }
@@ -2659,13 +2669,6 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
                                 }
                             }
                             break;
-                        case 62834: // Boom (Boombot)
-                        case 64320: // Rune of Power (Assembly of Iron)
-                        case 28374: // Decimate (Gluth)
-                        case 54426: // Decimate
-                            SearchAreaTarget(unitList, radius, pushType, SPELL_TARGETS_ANY);
-                            break;
-
                         default:
                             sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell (ID: %u) (caster Entry: %u) does not have type CONDITION_SOURCE_TYPE_SPELL_SCRIPT_TARGET record in `conditions` table.", m_spellInfo->Id, m_caster->GetEntry());
 
@@ -4976,7 +4979,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 }
             }
 
-            if (!m_IsTriggeredSpell && VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !m_caster->IsWithinLOSInMap(target))
+            if (!m_IsTriggeredSpell && VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !(m_customAttr & SPELL_ATTR0_CU_IGNORE_LOS) && !m_caster->IsWithinLOSInMap(target))
                 return SPELL_FAILED_LINE_OF_SIGHT;
 
         }
@@ -6878,7 +6881,7 @@ bool Spell::CheckTarget(Unit* target, uint32 eff)
                 caster = m_caster;
             if (target->GetEntry() == 5925)
                 return true;
-            if (target != m_caster && !target->IsWithinLOSInMap(caster))
+            if (target != m_caster && !(m_customAttr & SPELL_ATTR0_CU_IGNORE_LOS) &&!target->IsWithinLOSInMap(caster))
                 return false;
             break;
     }
@@ -7280,6 +7283,9 @@ void Spell::SetSpellValue(SpellValueMod mod, int32 value)
             break;
         case SPELLVALUE_MAX_TARGETS:
             m_spellValue->MaxAffectedTargets = (uint32)value;
+            break;
+        case SPELLVALUE_AURA_STACK:
+            m_spellValue->AuraStackAmount = uint8(value);
             break;
     }
 }

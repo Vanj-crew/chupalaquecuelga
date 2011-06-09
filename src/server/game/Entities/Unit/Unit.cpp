@@ -5100,15 +5100,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     basepoints0 = int32(std::min(CalculatePctN(damage, triggerAmount), CountPctFromMaxHealth(50)));
                     triggered_spell_id = 25997;
                     break;
-                }
-                // Grim Reprisal
-                case 63305:
-                {
-                    // return 60% damage to the attacker
-                    basepoints0 = int32(CalculatePctU(damage, 60));
-                    triggered_spell_id = 64039;
-                    break;
-                }
+                }                
                 // Sweeping Strikes
                 case 18765:
                 case 35429:
@@ -11531,7 +11523,11 @@ bool Unit::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) con
 {
     if (!spellInfo)
         return false;
-    //If m_immuneToEffect type contain this effect type, IMMUNE effect.
+    // not sure
+    if (spellInfo->Attributes & SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY)
+        return false;
+
+    // If m_immuneToEffect type contain this effect type, IMMUNE effect.
     uint32 effect = spellInfo->Effect[index];
     SpellImmuneList const& effectList = m_spellImmune[IMMUNITY_EFFECT];
     for (SpellImmuneList::const_iterator itr = effectList.begin(); itr != effectList.end(); ++itr)
