@@ -766,7 +766,7 @@ void BattlegroundQueue::Update(BattlegroundTypeId bgTypeId, BattlegroundBracketI
             for (GroupsQueueType::const_iterator citr = m_SelectionPools[BG_TEAM_HORDE].SelectedGroups.begin(); citr != m_SelectionPools[BG_TEAM_HORDE].SelectedGroups.end(); ++citr)
                 InviteGroupToBG((*citr), bg, (*citr)->Team);
 
-            if (!bg->HasFreeSlots())
+            if (!bg->HasFreeSlots() || bg->HasBalance())
             {
                 // remove BG from BGFreeSlotQueue
                 bg->RemoveFromBGFreeSlotQueue();

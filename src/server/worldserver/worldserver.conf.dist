@@ -2395,6 +2395,14 @@ Battleground.GiveXPForKills = 0
 Battleground.Random.ResetHour = 6
 
 #
+# 	Battleground.Balance
+#		Maximum separation between two Equip
+#		Default: -1 (disable)
+#
+
+Battleground.Balance = 2
+
+#
 ###################################################################################################
 
 ###################################################################################################

@@ -158,6 +158,7 @@ Battleground::Battleground()
     m_MaxPlayers        = 0;
     m_MinPlayersPerTeam = 0;
     m_MinPlayers        = 0;
+    m_balance           = 0;
 
     m_MapId             = 0;
     m_Map               = NULL;
@@ -349,39 +350,45 @@ inline void Battleground::_ProcessProgress(uint32 diff)
     // ***           BATTLEGROUND BALLANCE SYSTEM            ***
     // *********************************************************
     // if less then minimum players are in on one side, then start premature finish timer
-    if (!m_PrematureCountDown)
-    {
-        m_PrematureCountDown = true;
-        m_PrematureCountDownTimer = sBattlegroundMgr->GetPrematureFinishTime();
-    }
-    else if (m_PrematureCountDownTimer < diff)
-    {
-        // time's up!
-        uint32 winner = 0;
-        if (GetPlayersCountByTeam(ALLIANCE) >= GetMinPlayersPerTeam())
-            winner = ALLIANCE;
-        else if (GetPlayersCountByTeam(HORDE) >= GetMinPlayersPerTeam())
-            winner = HORDE;
+    
+    UpdateBalance();
+    
+    if (GetStatus() == STATUS_IN_PROGRESS && !isArena() && sBattlegroundMgr->GetPrematureFinishTime() && (GetPlayersCountByTeam(ALLIANCE) < GetMinPlayersPerTeam() || GetPlayersCountByTeam(HORDE) < GetMinPlayersPerTeam() || (m_balance + 1) > sWorld->getIntConfig(CONFIG_BALANCE_MINIMUM)))
+     {
+         if (!m_PrematureCountDown)
+         {
+             m_PrematureCountDown = true;
+             m_PrematureCountDownTimer = sBattlegroundMgr->GetPrematureFinishTime();
+         }
+         else if (m_PrematureCountDownTimer < diff)
+         {
+             // time's up!
+             uint32 winner = 0;
+             if (GetPlayersCountByTeam(ALLIANCE) >= GetMinPlayersPerTeam())
+                 winner = ALLIANCE;
+             else if (GetPlayersCountByTeam(HORDE) >= GetMinPlayersPerTeam())
+                 winner = HORDE;
 
-        EndBattleground(winner);
-        m_PrematureCountDown = false;
-    }
-    else if (!sBattlegroundMgr->isTesting())
-    {
-        uint32 newtime = m_PrematureCountDownTimer - diff;
-        // announce every minute
-        if (newtime > (MINUTE * IN_MILLISECONDS))
-        {
-            if (newtime / (MINUTE * IN_MILLISECONDS) != m_PrematureCountDownTimer / (MINUTE * IN_MILLISECONDS))
-                PSendMessageToAll(LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING, CHAT_MSG_SYSTEM, NULL, (uint32)(m_PrematureCountDownTimer / (MINUTE * IN_MILLISECONDS)));
-        }
-        else
-        {
-            //announce every 15 seconds
-            if (newtime / (15 * IN_MILLISECONDS) != m_PrematureCountDownTimer / (15 * IN_MILLISECONDS))
-                PSendMessageToAll(LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING_SECS, CHAT_MSG_SYSTEM, NULL, (uint32)(m_PrematureCountDownTimer / IN_MILLISECONDS));
-        }
-        m_PrematureCountDownTimer = newtime;
+             EndBattleground(winner);
+             m_PrematureCountDown = false;
+         }
+         else if (!sBattlegroundMgr->isTesting())
+         {
+             uint32 newtime = m_PrematureCountDownTimer - diff;
+             // announce every minute
+             if (newtime > (MINUTE * IN_MILLISECONDS))
+             {
+                 if (newtime / (MINUTE * IN_MILLISECONDS) != m_PrematureCountDownTimer / (MINUTE * IN_MILLISECONDS))
+                     PSendMessageToAll(LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING, CHAT_MSG_SYSTEM, NULL, (uint32)(m_PrematureCountDownTimer / (MINUTE * IN_MILLISECONDS)));
+             }
+             else
+             {
+                 //announce every 15 seconds
+                 if (newtime / (15 * IN_MILLISECONDS) != m_PrematureCountDownTimer / (15 * IN_MILLISECONDS))
+                     PSendMessageToAll(LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING_SECS, CHAT_MSG_SYSTEM, NULL, (uint32)(m_PrematureCountDownTimer / IN_MILLISECONDS));
+             }
+             m_PrematureCountDownTimer = newtime;
+         }
     }
 }
 
@@ -971,8 +978,11 @@ void Battleground::RemovePlayerAtLeave(const uint64& guid, bool Transport, bool 
         if (isBattleground() && GetStatus() < STATUS_WAIT_LEAVE)
         {
             // a player has left the battleground, so there are free slots -> add to queue
-            AddToBGFreeSlotQueue();
-            sBattlegroundMgr->ScheduleQueueUpdate(0, 0, bgQueueTypeId, bgTypeId, GetBracketId());
+            if (!HasBalance())
+            {
+                AddToBGFreeSlotQueue();
+                sBattlegroundMgr->ScheduleQueueUpdate(0, 0, bgQueueTypeId, bgTypeId, GetBracketId());
+            }
         }
         // Let others know
         WorldPacket data;
@@ -1134,6 +1144,17 @@ void Battleground::AddPlayer(Player* plr)
     // setup BG group membership
     PlayerAddedToBGCheckIfBGIsRunning(plr);
     AddOrSetPlayerToCorrectBgGroup(plr, team);
+    
+    if (isBattleground() && GetStatus() < STATUS_WAIT_LEAVE)
+    {
+        BattlegroundTypeId bgTypeId = GetTypeID();
+        // a player has left the battleground, so there are free slots -> add to queue
+        if (!HasBalance() && sWorld->getIntConfig(CONFIG_BALANCE_MINIMUM) > 0)
+        {
+            AddToBGFreeSlotQueue();
+            sBattlegroundMgr->ScheduleQueueUpdate(0, 0, bgQueueTypeId, bgTypeId, GetBracketId());
+        }
+    }
 
     // Log
     sLog->outDetail("BATTLEGROUND: Player %s joined the battle.", plr->GetName());
@@ -1295,6 +1316,23 @@ uint32 Battleground::GetFreeSlotsForTeam(uint32 Team) const
 bool Battleground::HasFreeSlots() const
 {
     return GetPlayersSize() < GetMaxPlayers();
+}
+
+void Battleground::UpdateBalance()
+{
+    if (GetPlayersCountByTeam(ALLIANCE) < GetPlayersCountByTeam(HORDE))
+        m_balance = GetPlayersCountByTeam(HORDE) - GetPlayersCountByTeam(ALLIANCE);
+    else if (GetPlayersCountByTeam(HORDE) < GetPlayersCountByTeam(ALLIANCE))
+        m_balance = GetPlayersCountByTeam(ALLIANCE) - GetPlayersCountByTeam(HORDE);
+    else
+        m_balance = 0;
+}
+
+bool Battleground::HasBalance() const
+{
+    if (sWorld->getIntConfig(CONFIG_BALANCE_MINIMUM) < 0)
+        return false;
+    return m_balance > sWorld->getIntConfig(CONFIG_BALANCE_MINIMUM);
 }
 
 void Battleground::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
