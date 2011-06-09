@@ -1742,12 +1742,12 @@ void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask, DamageEff
                 absorbAurEff->GetBase()->Remove(AURA_REMOVE_BY_ENEMY_SPELL);
         }
 
-        // Implementando Glifo Armadura Inquebrantable        
+          // Implementando Glifo Armadura Inquebrantable        
         SpellEntry const * spellProto = absorbAurEff->GetSpellProto();
         
         /* Este switch deja abierta la posibilidad de seguir mejorando o añadiendo 
            nuevas mejoras, independiente de la clase */
-        
+        /*
         switch (spellProto->SpellFamilyName)
         {
             case SPELLFAMILY_DEATHKNIGHT: 
@@ -1766,6 +1766,7 @@ void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask, DamageEff
                 } 
             }
         }
+        */
     }
 
     // absorb by mana cost
