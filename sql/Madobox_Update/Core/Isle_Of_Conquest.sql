@@ -13,5 +13,4 @@ UPDATE `creature_template` SET `unit_flags` = 256 WHERE `entry` = 34922;
 UPDATE `creature_template` SET `unit_flags` = 256 WHERE `entry` = 34918;
 UPDATE `creature_template` SET `unit_flags` = 256 WHERE `entry` = 34919;
 UPDATE `creature_template` SET `unit_flags` = 0  WHERE `entry` in (34924,35403, 34922,35405);
-UPDATE `creature_template` SET `faction_A` = 35, `faction_H` = 35 WHERE `entry` in (34924,35403);
-UPDATE `creature_template` SET `faction_A` = 35, `faction_H` = 35 WHERE `entry` in (34922,35405);
+UPDATE `creature_template` SET `faction_A` = 84, `faction_H` = 84 WHERE `entry` IN (34924,35403);
