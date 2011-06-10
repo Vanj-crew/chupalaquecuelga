@@ -56,6 +56,26 @@ bool ChatHandler::HandleStartCommand(const char* /*args*/)
 {
     Player *chr = m_session->GetPlayer();
 
+     /* Partimos por revisar la clase (esto solo afecta a los DK*/
+     if(chr->getClass() == CLASS_DEATH_KNIGHT) 
+     {
+            //Comprueba las tres quest donde siempre se bugean y usan el comando
+	   if(chr->GetQuestStatus(12801) == QUEST_STATUS_INCOMPLETE || chr->GetQuestStatus(13165) == QUEST_STATUS_INCOMPLETE ) 
+                   {
+		      SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
+		      SetSentErrorMessage(true);
+		      return false;
+		}	
+
+		//Comprueba la spell "Portón de la muerte" http://es.wowhead.com/spell=50977/
+	   if(!chr->HasSpell(50977)) 
+                   {
+		     SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
+		     SetSentErrorMessage(true);
+		     return false;
+		}
+     }
+
     if (chr->isInFlight())
     {
         SendSysMessage(LANG_YOU_IN_FLIGHT);
