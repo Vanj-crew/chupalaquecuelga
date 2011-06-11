@@ -4056,11 +4056,6 @@ void SpellMgr::LoadSpellCustomAttr()
             mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_ARMOR;
             count++;
             break;
-        // Strength of the Pack
-        case 64381:
-            spellInfo->StackAmount = 4;
-            count++;
-            break;
         case 50526: // Wandering Plague
         case 63675: // Improved Devouring Plague
             spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
@@ -4107,38 +4102,64 @@ void SpellMgr::LoadSpellCustomAttr()
             break;
         // ULDUAR SPELLS
         //
-        case 62039: // Hodir - Biting Cold - Remove on Move
-            spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_MOVE;
-            count++;
-            break;
-        case 62775: // XT-002 - Tympanic Tantrum
-        case 64443: // Algalon - Big Bang
-        case 64584: // Algalon - Big Bang
-            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_ARMOR;
-            count++;
-            break;
-        case 65210: // Keeper Mimiron Destabilization Matrix
-            // Ignore LoS (because Mimiron stands in a Tube and is out of LoS)
-            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_LOS;
-            count++;
-            break;
         case 62016: // Thorim - Charge Orb
             mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_LOS;
             spellInfo->MaxAffectedTargets = 1;
             ++count;
             break;
+        case 62039: // Hodir - Biting Cold - Remove on Move
+            spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_MOVE;
+            ++count;
+            break;
+        case 62775: // XT-002 - Tympanic Tantrum
+        case 64443: // Algalon - Big Bang
+        case 64584: // Algalon - Big Bang
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_ARMOR;
+            ++count;
+            break;
+        case 63025: // XT-002 Gravity Bomb
+        case 64233: // XT-002 Gravity Bomb
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_EXCLUDE_SELF;
+            ++count;
+            break;
+        case 65210: // Keeper Mimiron Destabilization Matrix - Ignore LoS (because Mimiron stands in a Tube and is out of LoS)
+        case 62042: // Thorim - Stormhammer
+        case 62521: // Freya - Attuned to Nature 25 Dose Reduction
+        case 62524: // Freya - Attuned to Nature 2 Dose Reduction
+        case 62525: // Freya - Attuned to Nature 10 Dose Reduction
+            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_IGNORE_LOS;
+            ++count;
+            break;
         case 62488: // Ignis Activate Construct (only visually)
-        case 63024: // XT-002 Gravity Bomb
-        case 64234: // XT-002 Gravity Bomb
-        case 63018: // XT-002 Searing Light
-        case 65121: // XT-002 Searing Light
         case 65301: // Sara Psychosis
         case 63830: // Sara Malady of the Mind
         case 64465: // Yogg Saron Shadow Beacon
         case 63342: // Focused Eyebeam Summon Trigger
             spellInfo->MaxAffectedTargets = 1;
-            count++;
-            break;   
+            ++count;
+            break;
+        case 63802: // Sara Brain Link
+            spellInfo->MaxAffectedTargets = 2;
+            ++count;
+            break;
+        case 62716: // Growth of Nature
+        case 65584: // Growth of Nature
+            spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
+            ++count;
+            break;
+        case 64381: // Strength of the Pack
+            spellInfo->StackAmount = 4;
+            ++count;
+            break;
+        //case 62834: // Boom
+        // This hack is here because we suspect our implementation of spell effect execution on targets
+        // is done in the wrong order. We suspect that EFFECT_0 needs to be applied on all targets,
+        // then EFFECT_1, etc - instead of applying each effect on target1, then target2, etc.
+        // The above situation causes the visual for this spell to be bugged, so we remove the instakill
+        // effect and implement a script hack for that.
+        //    spellInfo->Effect[EFFECT_1] = 0;
+        //    ++count;
+        //    break;
         case 63293: // Mimiron - P3Wx2 Laser Barrage
             mSpellCustomAttr[i] |= SPELL_ATTR0_CU_CONE_LINE;
             ++count;
@@ -4154,14 +4175,10 @@ void SpellMgr::LoadSpellCustomAttr()
             spellInfo->Attributes |= SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
             ++count;
             break;
-        case 63025: // XT-002 Gravity Bomb
-        case 64233: // XT-002 Gravity Bomb
-            mSpellCustomAttr[i] |= SPELL_ATTR0_CU_EXCLUDE_SELF;
+        case 62711: // Ignis - Grab
+            spellInfo->Attributes |= SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
+            spellInfo->AttributesEx2 |= SPELL_ATTR2_CANT_REFLECTED;
             ++count;
-            break;
-        case 63802: // Sara Brain Link
-            spellInfo->MaxAffectedTargets = 2;
-            count++;
             break;
         // ENDOF ULDUAR SPELLS
         //

@@ -53,6 +53,12 @@ enum UlduarTypes
     DATA_RAZORSCALE_CONTROL,
 
     // Kologarn:
+    // XT-002
+    DATA_TOY_PILE_0,
+    DATA_TOY_PILE_1,
+    DATA_TOY_PILE_2,
+    DATA_TOY_PILE_3,
+
     DATA_LEFT_ARM,
     DATA_RIGHT_ARM,
 
@@ -89,6 +95,7 @@ enum UlduarNPCs
     NPC_STEELFORGED_DEFFENDER   = 33236,
     NPC_EXPEDITION_COMMANDER    = 33210,
     NPC_XT002                   = 33293,
+    NPC_XT_TOY_PILE                              = 33337,
     NPC_STEELBREAKER            = 32867,
     NPC_MOLGEIM                 = 32927,
     NPC_BRUNDIR                 = 32857,
@@ -139,6 +146,8 @@ enum UlduarNPCs
 
 enum UlduarGameObjects
 {
+    GO_IRON_COUNCIL_ENTRANCE    = 194554,
+    GO_ARCHIVUM_DOOR            = 194556,
     GO_KOLOGARN_CHEST_HERO      = 195047,
     GO_KOLOGARN_CHEST           = 195046,
     GO_KOLOGARN_BRIDGE          = 194232,
@@ -148,6 +157,8 @@ enum UlduarGameObjects
     GO_THORIM_ENCOUNTER_DOOR    = 194559,
     GO_THORIM_STONE_DOOR        = 194558,
     GO_THORIM_RUNIC_DOOR        = 194557,
+    GO_HODIR_RARE_CACHE_HERO    = 194201,
+    GO_HODIR_RARE_CACHE         = 194200,
     GO_HODIR_CHEST_HERO         = 194308,
     GO_HODIR_CHEST              = 194307,
     GO_HODIR_IN_DOOR_STONE      = 194442,
