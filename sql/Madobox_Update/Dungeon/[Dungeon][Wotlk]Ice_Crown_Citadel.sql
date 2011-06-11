@@ -114,13 +114,13 @@ UPDATE `instance_template` SET `script`='instance_icecrown_citadel' WHERE `map` 
 DELETE FROM `creature_addon` WHERE `guid` IN (136107,104365);
 DELETE FROM `creature_template_addon` WHERE `entry` IN (37690,37672,36659,38186,37945,38429,38430,37918,37006,37186);
 
-INSERT INTO creature_addon (`guid`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
+REPLACE INTO creature_addon (`guid`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
 (136107, 0, 0, 0, 1, 0, '18950 0 18950 1 72242 0');
 
-INSERT INTO `creature_addon` (`guid`, `bytes1`) VALUES
+REPLACE INTO `creature_addon` (`guid`, `bytes1`) VALUES
 (104365,0x03000000); -- Blood Queen Lana'Thel
 
-INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
+REPLACE INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
 (37690, 0, 0, 0, 0, 0, '70345 0  70343 0'),
 (37672, 0, 0, 0, 0, 0, '70385 0 70405 0'),
 (38186, 0, 0, 0, 0, 0, '71304 0'),
@@ -139,7 +139,7 @@ DELETE FROM `conditions` WHERE `SourceEntry` IN (69508,70881,70360,36659,70781,7
 DELETE FROM `conditions` WHERE `ConditionValue2` IN (SELECT `id` FROM `creature` WHERE `map` = 631);
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry` IN (70952,70982,70981,70983,71070,71081,71080);
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=21 AND `SourceGroup` IN (37672,38285);
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+replace into `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
 (13,0,70360,0,18,1,37690,0,0, '', ''),
 (13,0,69157,0,18,1,36659,0,0, '', 'Festergut - Gaseous Blight'),
 (13,0,69162,0,18,1,36659,0,0, '', 'Festergut - Gaseous Blight'),
@@ -162,56 +162,57 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 (13,0,71080,0,18,1,37972,0,0, '', 'Keleseth - Invocation of Blood visual'),
 (13,0,74074,0,18,1,36597,0,0, '', 'The Lich King - Plague Siphon');
 
-INSERT INTO `conditions` VALUES ('13', '0', '69508', '0', '18', '1', '37986', '0', '0', '', 'Rotface - Slime Spray');
-INSERT INTO `conditions` VALUES ('13', '0', '69783', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69797', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69799', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69802', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69782', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69796', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69798', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69801', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '69540', '0', '18', '1', '36897', '0', '0', '', 'Rotface - Summon Big Ooze');
-INSERT INTO `conditions` VALUES ('13', '0', '69538', '0', '18', '1', '36897', '0', '0', '', 'Rotface - Small Ooze Combine');
-INSERT INTO `conditions` VALUES ('13', '0', '69553', '0', '18', '1', '36899', '0', '0', '', 'Rotface - Large Ooze Combine');
-INSERT INTO `conditions` VALUES ('13', '0', '69610', '0', '18', '1', '36897', '0', '0', '', 'Rotface - Large Ooze Buff Combine');
-INSERT INTO `conditions` VALUES ('13', '0', '70079', '0', '18', '1', '36678', '0', '0', '', 'Rotface - Ooze Flood');
-INSERT INTO `conditions` VALUES ('13', '0', '72401', '0', '18', '1', '37672', '0', '0', '', 'Putricide - Mutated Abomination');
-INSERT INTO `conditions` VALUES ('13', '0', '72401', '0', '18', '1', '38285', '0', '0', '', 'Putricide - Mutated Abomination');
-INSERT INTO `conditions` VALUES ('13', '0', '71617', '0', '18', '1', '38317', '0', '0', '', 'Putricide - Tear Gas');
-INSERT INTO `conditions` VALUES ('13', '0', '71412', '0', '18', '1', '37824', '0', '0', '', 'Putricide - Unstable Experiment');
-INSERT INTO `conditions` VALUES ('13', '0', '71415', '0', '18', '1', '37824', '0', '0', '', 'Putricide - Unstable Experiment');
-INSERT INTO `conditions` VALUES ('13', '0', '71621', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '72850', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '72851', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '72852', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '71621', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '72850', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '72851', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '72852', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '71704', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '71704', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
-INSERT INTO `conditions` VALUES ('13', '0', '72745', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
-INSERT INTO `conditions` VALUES ('13', '0', '72746', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
-INSERT INTO `conditions` VALUES ('13', '0', '72747', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
-INSERT INTO `conditions` VALUES ('13', '0', '72748', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
-INSERT INTO `conditions` VALUES ('13', '0', '68861', '0', '18', '1', '36497', '0', '0', '', 'Bronjahm - Consume Soul');
-INSERT INTO `conditions` VALUES ('21', '38285', '71516', '0', '3', '49888', '0', '0', '0', '', 'Mutated Abomination - Unholy Infusion');
-INSERT INTO `conditions` VALUES ('13', '0', '70952', '0', '18', '1', '37970', '0', '0', '', 'Valanar - Invocation of Blood');
-INSERT INTO `conditions` VALUES ('13', '0', '70982', '0', '18', '1', '37973', '0', '0', '', 'Taldaram - Invocation of Blood');
-INSERT INTO `conditions` VALUES ('13', '0', '70981', '0', '18', '1', '37972', '0', '0', '', 'Keleseth - Invocation of Blood');
-INSERT INTO `conditions` VALUES ('13', '0', '70983', '0', '18', '1', '37970', '0', '0', '', 'Valanar - Invocation of Blood beam');
-INSERT INTO `conditions` VALUES ('13', '0', '70983', '0', '18', '1', '37973', '0', '0', '', 'Taldaram - Invocation of Blood beam');
-INSERT INTO `conditions` VALUES ('13', '0', '70983', '0', '18', '1', '37972', '0', '0', '', 'Keleseth - Invocation of Blood beam');
-INSERT INTO `conditions` VALUES ('13', '0', '71070', '0', '18', '1', '37970', '0', '0', '', 'Valanar - Invocation of Blood visual');
-INSERT INTO `conditions` VALUES ('13', '0', '71081', '0', '18', '1', '37973', '0', '0', '', 'Taldaram - Invocation of Blood visual');
-INSERT INTO `conditions` VALUES ('13', '0', '71080', '0', '18', '1', '37972', '0', '0', '', 'Keleseth - Invocation of Blood visual');
-
+/*
+REPLACE INTO `conditions` VALUES ('13', '0', '69508', '0', '18', '1', '37986', '0', '0', '', 'Rotface - Slime Spray');
+REPLACE INTO `conditions` VALUES ('13', '0', '69783', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69797', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69799', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69802', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69782', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69796', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69798', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69801', '0', '18', '1', '37013', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '69540', '0', '18', '1', '36897', '0', '0', '', 'Rotface - Summon Big Ooze');
+REPLACE INTO `conditions` VALUES ('13', '0', '69538', '0', '18', '1', '36897', '0', '0', '', 'Rotface - Small Ooze Combine');
+REPLACE INTO `conditions` VALUES ('13', '0', '69553', '0', '18', '1', '36899', '0', '0', '', 'Rotface - Large Ooze Combine');
+REPLACE INTO `conditions` VALUES ('13', '0', '69610', '0', '18', '1', '36897', '0', '0', '', 'Rotface - Large Ooze Buff Combine');
+REPLACE INTO `conditions` VALUES ('13', '0', '70079', '0', '18', '1', '36678', '0', '0', '', 'Rotface - Ooze Flood');
+REPLACE INTO `conditions` VALUES ('13', '0', '72401', '0', '18', '1', '37672', '0', '0', '', 'Putricide - Mutated Abomination');
+REPLACE INTO `conditions` VALUES ('13', '0', '72401', '0', '18', '1', '38285', '0', '0', '', 'Putricide - Mutated Abomination');
+REPLACE INTO `conditions` VALUES ('13', '0', '71617', '0', '18', '1', '38317', '0', '0', '', 'Putricide - Tear Gas');
+REPLACE INTO `conditions` VALUES ('13', '0', '71412', '0', '18', '1', '37824', '0', '0', '', 'Putricide - Unstable Experiment');
+REPLACE INTO `conditions` VALUES ('13', '0', '71415', '0', '18', '1', '37824', '0', '0', '', 'Putricide - Unstable Experiment');
+REPLACE INTO `conditions` VALUES ('13', '0', '71621', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '72850', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '72851', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '72852', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '71621', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '72850', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '72851', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '72852', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '71704', '0', '18', '1', '38309', '1', '0', '', 'Putricide - Green Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '71704', '0', '18', '1', '38308', '2', '0', '', 'Putricide - Orange Bottle');
+REPLACE INTO `conditions` VALUES ('13', '0', '72745', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
+REPLACE INTO `conditions` VALUES ('13', '0', '72746', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
+REPLACE INTO `conditions` VALUES ('13', '0', '72747', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
+REPLACE INTO `conditions` VALUES ('13', '0', '72748', '0', '18', '1', '36678', '0', '0', '', 'Putricide - Mutated Plague');
+REPLACE INTO `conditions` VALUES ('13', '0', '68861', '0', '18', '1', '36497', '0', '0', '', 'Bronjahm - Consume Soul');
+REPLACE INTO `conditions` VALUES ('21', '38285', '71516', '0', '3', '49888', '0', '0', '0', '', 'Mutated Abomination - Unholy Infusion');
+REPLACE INTO `conditions` VALUES ('13', '0', '70952', '0', '18', '1', '37970', '0', '0', '', 'Valanar - Invocation of Blood');
+REPLACE INTO `conditions` VALUES ('13', '0', '70982', '0', '18', '1', '37973', '0', '0', '', 'Taldaram - Invocation of Blood');
+REPLACE INTO `conditions` VALUES ('13', '0', '70981', '0', '18', '1', '37972', '0', '0', '', 'Keleseth - Invocation of Blood');
+REPLACE INTO `conditions` VALUES ('13', '0', '70983', '0', '18', '1', '37970', '0', '0', '', 'Valanar - Invocation of Blood beam');
+REPLACE INTO `conditions` VALUES ('13', '0', '70983', '0', '18', '1', '37973', '0', '0', '', 'Taldaram - Invocation of Blood beam');
+REPLACE INTO `conditions` VALUES ('13', '0', '70983', '0', '18', '1', '37972', '0', '0', '', 'Keleseth - Invocation of Blood beam');
+REPLACE INTO `conditions` VALUES ('13', '0', '71070', '0', '18', '1', '37970', '0', '0', '', 'Valanar - Invocation of Blood visual');
+REPLACE INTO `conditions` VALUES ('13', '0', '71081', '0', '18', '1', '37973', '0', '0', '', 'Taldaram - Invocation of Blood visual');
+REPLACE INTO `conditions` VALUES ('13', '0', '71080', '0', '18', '1', '37972', '0', '0', '', 'Keleseth - Invocation of Blood visual');
+*/
 
 -- creature
 
 DELETE FROM `creature` WHERE `id` IN(37813, 37013, 36659, 37950);
-INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
 (48969,37013,631,1,1,11686,0,4291.18,3092.92,372.97,2.33874,300,0,0,25200,0,0,0,0,0,0), -- puddle stalker
 (48971,37013,631,1,1,11686,0,4312.14,3112.98,372.97,2.51327,300,0,0,25200,0,0,0,0,0,0),
 (48973,37013,631,1,1,11686,0,4244.04,3092.66,372.97,0.97738,300,0,0,25200,0,0,0,0,0,0),
@@ -225,7 +226,7 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 (1000000,37950,631,15,16,0,0,4203.65,2483.89,390.961,5.51524,604800,0,0,6000003,0,0,0,0,33540,8);
 
 DELETE FROM `creature` WHERE `id`=37824;
-INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
 (104360, 37824, 631, 15, 1, 11686, 0, 4324.28, 3215.04, 408.705, 5.58505, 86400, 0, 0, 25200, 0, 0, 0, 0, 0, 0),
 (201508, 37824, 631, 15, 1, 11686, 0, 4388.1, 3213.29, 408.74, 3.83972, 86400, 0, 0, 25200, 0, 0, 0, 0, 0, 0),
 (201165, 37824, 631, 15, 1, 0, 0, 4388.1, 3213.29, 408.74, 3.83972, 86400, 0, 0, 25200, 0, 0, 0, 0, 0, 0);
@@ -236,7 +237,7 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 DELETE FROM `spell_linked_spell` WHERE `spell_trigger` IN (72202,70117);
 DELETE FROM `spell_linked_spell` WHERE `spell_effect` IN(72202,69166,70347,72380,69706,70702,70311, 69291, 70338,72846,69201,74074);
 DELETE FROM `spell_linked_spell` WHERE `spell_effect`=70530;
-INSERT INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment`) VALUES
+REPLACE INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment`) VALUES
 (70360,70347,0,'Eat Ooze'),
 (-70447,70530,0, 'Putricide: Volatile Ooze Adhesive Protection'),
 (-72836,70530,0, 'Putricide: Volatile Ooze Adhesive Protection'),
@@ -269,7 +270,7 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment
 -- Linked Respawn
 
 -- DELETE FROM `linked_respawn` WHERE `guid` IN (136104,136105,136107,67608,67614,67901,77641,77642,77643,115558);
--- INSERT INTO `linked_respawn` (`guid`,`linkedGuid`) VALUES
+-- REPLACE INTO `linked_respawn` (`guid`,`linkedGuid`) VALUES
 -- (136104,136104), -- Lord Marrowgar
 -- (136105,136105), -- Lady Deathwhisper
 -- (136107,136107), -- Deathbringer Saurfang
@@ -284,7 +285,7 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment
 -- Npc spell click spell
 
 DELETE FROM `npc_spellclick_spells` WHERE npc_entry IN (37945,38430);
-INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `quest_start`, `quest_start_active`, `quest_end`, `cast_flags`, `aura_required`, `aura_forbidden`, `user_type`) VALUES
+REPLACE INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `quest_start`, `quest_start_active`, `quest_end`, `cast_flags`, `aura_required`, `aura_forbidden`, `user_type`) VALUES
 (37945,70766,0,0,0,3,0,0,0),
 (38430,70766,0,0,0,3,0,0,0);
 
@@ -328,7 +329,7 @@ DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sindragosa_blistering
 DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_valanar_kinetic_bomb_absorb';
 DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_putricide_ooze_channel';
 
-INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
+REPLACE INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
 (71412,'spell_putricide_ooze_summon'),
 (71415,'spell_putricide_ooze_summon'),
 (72510,'spell_putricide_mutated_transformation_dismiss'),
@@ -419,7 +420,7 @@ INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
 
 UPDATE waypoint_scripts SET delay = 3 WHERE dataint = 38879 AND command = 15;
 DELETE FROM `spell_scripts` WHERE id = 72429 AND command = 15;
-INSERT INTO `spell_scripts` VALUE
+REPLACE INTO `spell_scripts` VALUE
 ('72429','0','3','15','72423','0','0','0','0','0','0');
 
 SET @LIGHT_S_HAMMER := 70781;
@@ -435,7 +436,7 @@ DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry` IN
 
 -- Add target coords
 DELETE FROM `spell_target_position` WHERE `id` IN (@LIGHT_S_HAMMER,@ORATORY_OF_THE_DAMNED,@RAMPART_OF_SKULLS,@DEATHBRINGER_S_RISE,@UPPER_SPIRE,@SINDRAGOSA_S_LAIR,@FROZEN_THRONE);
-INSERT INTO `spell_target_position` (`id`,`target_map`,`target_position_x`,`target_position_y`,`target_position_z`,`target_orientation`) VALUES
+REPLACE INTO `spell_target_position` (`id`,`target_map`,`target_position_x`,`target_position_y`,`target_position_z`,`target_orientation`) VALUES
 (@LIGHT_S_HAMMER,631,-17.0711,2211.47,30.0546,3.14159),
 (@ORATORY_OF_THE_DAMNED,631,-503.593,2211.47,62.7621,3.14159),
 (@RAMPART_OF_SKULLS,631,-615.146,2211.47,199.909,0.0),
@@ -447,7 +448,7 @@ INSERT INTO `spell_target_position` (`id`,`target_map`,`target_position_x`,`targ
 -- Event AI Thanks Heisei Project!
 DELETE FROM `creature_ai_scripts` WHERE `creature_id` IN (37868,36791,37863,37886,37934,38068,37698,36701);
 UPDATE `creature_template` SET `AIName`= 'EventAI' WHERE `entry` IN (37868,36791,37863,37886,37934,38068,37698,36701);
-INSERT INTO `creature_ai_scripts` VALUES
+REPLACE INTO `creature_ai_scripts` VALUES
 ('85021059','37868','0','0','100','7','15000','15000','27000','27000','11','71179','4','0','0','0','0','0','0','0','0','0','Risen Archmage - Cast Mana Void'),
 ('85021060','37868','0','0','100','25','15000','15000','27000','27000','11','71741','4','0','0','0','0','0','0','0','0','0','Risen Archmage - Cast Mana Void'),
 ('85021061','37868','0','0','100','3','10000','10000','18000','22000','11','70759','0','0','0','0','0','0','0','0','0','0','Risen Archmage - Cast Frostbolt Volley'),
@@ -490,7 +491,7 @@ DELETE FROM script_texts WHERE entry <= -1810001 AND entry >= -1810032;
 
 # 1
 DELETE FROM script_texts WHERE `npc_entry` = 36612;
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (36612,-1631000,'This is the beginning AND the end, mortals. None may enter the master''s sanctum!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'????????, ??? ???? ?????????? ??? ? ?? ?????????! ????? ?? ????? ???????  ? ??????? ?????????!',16950,1,0,0,'SAY_ENTER_ZONE'),
 (36612,-1631001,'The Scourge will wash over this world as a swarm of death and destruction!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'????? ??????? ???? ??? ?????? ?????? ? ??????????!',16941,1,0,0,'SAY_AGGRO'),
 (36612,-1631002,'BONE STORM!',NULL,NULL, NULL,NULL,NULL,NULL,NULL,'????? ??????!',16946,1,0,0,'SAY_BONE_STORM'),
@@ -505,7 +506,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 
 #2
 DELETE FROM `script_texts` WHERE `entry` BETWEEN -1631028 AND -1631011;
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (36855,-1631011, 'You have found your way here, because you are among the few gifted with true vision in a world cursed with blindness.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17272,1,0,0, 'SAY_INTRO_1'),
 (36855,-1631012, 'You can see through the fog that hangs over this world like a shroud, and grasp where true power lies.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17273,1,0,0, 'SAY_INTRO_2'),
 (36855,-1631013, 'Fix your eyes upon your crude hands: the sinew, the soft meat, the dark blood coursing within.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16878,1,0,0, 'SAY_INTRO_3'),
@@ -526,7 +527,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 (36855,-1631028, 'All part of the masters plan! Your end is... inevitable!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16871,1,0,0, 'SAY_DEATH');
 
 # 3
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (0,-1665919,'Thank the spirits for you, brothers and sisters. The Skybreaker has already left. Quickly now, to Orgrim''s Hammer! If you leave soon, you may be able to catch them.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0,''),
 (0,-1665920,'This should be helpin''ya!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0,''),
 (0,-1665921,'Aka''Magosh, brave warriors. The alliance is in great number here.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,0,0,''),
@@ -571,7 +572,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 
 # 4
 DELETE FROM `script_texts` WHERE `entry` BETWEEN -1631077 AND -1631029;
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (37200,-1631029, 'Let''s get a move on then! Move ou...',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16974,1,0,0, 'SAY_INTRO_ALLIANCE_1'),
 (37813,-1631030, 'For every Horde soldier that you killed -- for every Alliance dog that fell, the Lich King''s armies grew. Even now the val''kyr work to raise your fallen as Scourge.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16701,1,0,0, 'SAY_INTRO_ALLIANCE_2'),
 (37813,-1631031, 'Things are about to get much worse. Come, taste the power that the Lich King has bestowed upon me!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16702,1,0,0, 'SAY_INTRO_ALLIANCE_3'),
@@ -624,7 +625,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 
 # 5
 DELETE FROM `script_texts` WHERE `entry` BETWEEN -1631090 AND -1631078;
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (36626,-1631078, 'NOOOO! You kill Stinky! You pay!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16907,1,0,0, 'SAY_STINKY_DEAD'),
 (36626,-1631079, 'Fun time!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16901,1,0,0, 'SAY_AGGRO'),
 (36678,-1631080, 'Just an ordinary gas cloud. But watch out, because that''s no ordinary gas cloud!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17119,1,0,432, 'SAY_GASEOUS_BLIGHT'),
@@ -641,7 +642,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 
 # 6
 DELETE FROM `script_texts` WHERE `entry` BETWEEN -1631103 AND -1631091;
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (36678,-1631091,'Great news, everyone! The slime is flowing again!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17126,1,0,1,'SAY_ROTFACE_OOZE_FLOOD1'),
 (36678,-1631092,'Good news, everyone! I''ve fixed the poison slime pipes!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17123,1,0,1,'SAY_ROTFACE_OOZE_FLOOD2'),
 (36678,-1631093,'Terrible news, everyone, Rotface is dead! But great news everyone, he left behind plenty of ooze for me to use! Whaa...? I''m a poet, and I didn''t know it? Astounding!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17146,1,0,0,'SAY_ROTFACE_DEATH'),
@@ -658,7 +659,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 
 # 7
 DELETE FROM `script_texts` WHERE `entry` BETWEEN -1631114 AND -1631104;
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (36678,-1631104,'Good news, everyone! I think I perfected a plague that will destroy all life on Azeroth!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17114,1,0,0,'SAY_AGGRO'),
 (36678,-1631105,'%s begins to cast Unstable Experiment!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,3,0,0,'EMOTE_UNSTABLE_EXPERIMENT'),
 (36678,-1631106,'Two oozes, one room! So many delightful possibilities...',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17122,1,0,0,'SAY_PHASE_TRANSITION_HEROIC'),
@@ -673,7 +674,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 
 # 8
 DELETE FROM `script_texts` WHERE `entry` BETWEEN -1631139 AND -1631115;
-INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (38004,-1631115,'Foolish mortals. You thought us defeated so easily? The San''layn are the Lich King''s immortal soldiers! Now you shall face their might combined!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16795,1,0,1,'SAY_INTRO_1'),
 (38004,-1631116,'Rise up, brothers, and destroy our enemies.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16796,1,0,0,'SAY_INTRO_2'),
 (37972,-1631117,'Such wondrous power! The Darkfallen Orb has made me INVINCIBLE!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16727,1,0,0,'SAY_KELESETH_INVOCATION'),
@@ -701,7 +702,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 (37970,-1631139,'...why...?',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16683,1,0,0,'SAY_VALANAR_DEATH');
 
 # 9
-INSERT INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (37955,-1666053,'Is that all you got?',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16791,1,0,0,''),
 (37955,-1666054,'You have made an... unwise... decision.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16782,1,0,0,''),
 (37955,-1666055,'Just a taste...',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16783,1,0,0,''),
@@ -714,7 +715,7 @@ INSERT INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,
 (37955,-1666062,'But... we were getting along... so well...',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,16794,1,0,0,'');
 
 # 10
-INSERT INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (36789,-1666063,'Heroes, lend me your aid! I... I cannot hold them off much longer! You must heal my wounds!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17064,1,0,0,''),
 (36789,-1666064,'I have opened a portal into the Emerald Dream. Your salvation lies within, heroes.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17068,1,0,0,''),
 (36789,-1666065,'My strength is returning! Press on, heroes!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17070,1,0,0,''),
@@ -725,7 +726,7 @@ INSERT INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,
 (36789,-1666070,'I am renewed! Ysera grants me the favor to lay these foul creatures to rest!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17071,1,0,0,'');
 
 # 11
-INSERT INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+REPLACE INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,`content_loc2`,`content_loc3`,`content_loc4`,`content_loc5`,`content_loc6`,`content_loc7`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
 (36853,-1666071,'You are fools to have come to this place! The icy winds of Northrend will consume your souls!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17007,1,0,0,''),
 (36853,-1666072,'Suffer, mortals, as your pathetic magic betrays you!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17014,1,0,0,''),
 (36853,-1666073,'Can you feel the cold hand of death upon your heart?',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17013,1,0,0,''),
@@ -738,7 +739,7 @@ INSERT INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc1`,
 (36853,-1666080,'Free...at last...',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17010,1,0,0,'');
 
 # 12
-INSERT INTO script_texts (npc_entry,entry,content_default,content_loc1,content_loc2,content_loc3,content_loc4,content_loc5,content_loc6,content_loc7,content_loc8,sound,type,language,emote,comment)VALUES
+REPLACE INTO script_texts (npc_entry,entry,content_default,content_loc1,content_loc2,content_loc3,content_loc4,content_loc5,content_loc6,content_loc7,content_loc8,sound,type,language,emote,comment)VALUES
 (36597,-1810001, 'So...the Light''s vaunted justice has finally arrived. Shall I lay down Frostmourne and throw myself at your mercy, Fordring?',null,null,null,null,null,null,null,null,17349,1,0,0,''),
 (38995,-1810002, 'We will grant you a swift death, Arthas. More than can be said for the thousands you''ve tortured and slain.',null,null,null,null,null,null,null,null,17390,1,0,0,''),
 (36597,-1810003, 'You will learn of that first hand. When my work is complete, you will beg for mercy -- and I will deny you. Your anguished cries will be testament to my unbridled power.',null,null,null,null,null,null,null,null,17350,1,0,0,''),
@@ -907,67 +908,67 @@ UPDATE `script_texts` SET `content_loc8`='???????????, ????? ?????!' WHERE `entr
 UPDATE `script_texts` SET `content_loc8`='??????-??? ?????!' WHERE `entry`=-1810022;
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (70107);
-INSERT INTO `spell_proc_event` VALUES (70107, 0x08, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000054, 0x00000000, 0, 20, 0);
+REPLACE INTO `spell_proc_event` VALUES (70107, 0x08, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000054, 0x00000000, 0, 20, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (69762);
-INSERT INTO `spell_proc_event` VALUES (69762, 0x00, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00014000, 0x00000000, 0, 101, 0);
+REPLACE INTO `spell_proc_event` VALUES (69762, 0x00, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00014000, 0x00000000, 0, 101, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72178);
-INSERT INTO `spell_proc_event` VALUES (72178, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00055510, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72178, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00055510, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72176);
-INSERT INTO `spell_proc_event` VALUES (72176, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00051154, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72176, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00051154, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (70602);
-INSERT INTO `spell_proc_event` VALUES (70602, 0x20, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x000AAA20, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (70602, 0x20, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x000AAA20, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (71494);
-INSERT INTO `spell_proc_event` VALUES (71494, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 101, 0);
+REPLACE INTO `spell_proc_event` VALUES (71494, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 101, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72176);
-INSERT INTO `spell_proc_event` VALUES (72176, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00051154, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72176, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00051154, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72178);
-INSERT INTO `spell_proc_event` VALUES (72178, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00055510, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72178, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00055510, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (71604);
-INSERT INTO `spell_proc_event` VALUES (71604, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (71604, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (70001);
-INSERT INTO `spell_proc_event` VALUES (70001, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (70001, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (71971);
-INSERT INTO `spell_proc_event` VALUES (71971, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (71971, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72256);
-INSERT INTO `spell_proc_event` VALUES (72256, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72256, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72408);
-INSERT INTO `spell_proc_event` VALUES (72408, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72408, 0x01, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (70672);
-INSERT INTO `spell_proc_event` VALUES (70672, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (70672, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72455);
-INSERT INTO `spell_proc_event` VALUES (72455, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72455, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72832);
-INSERT INTO `spell_proc_event` VALUES (72832, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72832, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (72833);
-INSERT INTO `spell_proc_event` VALUES (72833, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (72833, 0x28, 0x00, 0x00000000, 0x00000000, 0x00000000, 0x00000008, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_proc_event` WHERE `entry` IN (70904);
-INSERT INTO `spell_proc_event` VALUES (70904, 0x10, 0x06, 0x00000000, 0x00000000, 0x00000000, 0x00008000, 0x00000000, 0, 100, 0);
+REPLACE INTO `spell_proc_event` VALUES (70904, 0x10, 0x06, 0x00000000, 0x00000000, 0x00000000, 0x00008000, 0x00000000, 0, 100, 0);
 
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (72705, 69147, 69140);
-INSERT INTO `spell_script_names` VALUES
+REPLACE INTO `spell_script_names` VALUES
 ('72705', 'spell_marrowgar_coldflame'),
 ('69147', 'spell_marrowgar_coldflame_trigger'),
 ('69140', 'spell_marrowgar_coldflame');
 
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (69075, 70834, 70835, 70836);
-INSERT INTO `spell_script_names` VALUES 
+REPLACE INTO `spell_script_names` VALUES 
 (69075,    'spell_marrowgar_bone_storm'),
 (70834,    'spell_marrowgar_bone_storm'),
 (70835,    'spell_marrowgar_bone_storm'),
@@ -981,7 +982,7 @@ UPDATE `creature_template` SET `ScriptName`='npc_cult_adherent' WHERE `entry` IN
 UPDATE `creature_template` SET `ScriptName`='npc_vengeful_shade' WHERE `entry`=38222;
 
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (70903,71236) AND `ScriptName`='spell_cultist_dark_martyrdom';
-INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+REPLACE INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 (70903,'spell_cultist_dark_martyrdom'),
 (71236,'spell_cultist_dark_martyrdom');
 
@@ -1005,11 +1006,11 @@ UPDATE `creature_template` SET `faction_A` = 35, `faction_H` = 35 WHERE `entry` 
 UPDATE `creature_template` SET `faction_A` = 14, `faction_H` = 14 WHERE `entry` = 37985;
 UPDATE `creature_template` SET `ScriptName` = 'npc_dreamcloud_icc' WHERE `entry` = 38421;
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (71301, 71977);
-INSERT INTO `spell_script_names` VALUES (71301, 'spell_valithria_summon_portal'), (71977, 'spell_valithria_summon_portal');
+REPLACE INTO `spell_script_names` VALUES (71301, 'spell_valithria_summon_portal'), (71977, 'spell_valithria_summon_portal');
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (70873, 71941);
-INSERT INTO `spell_script_names` VALUES (70873, 'spell_valithria_vigor'), (71941, 'spell_valithria_vigor');
+REPLACE INTO `spell_script_names` VALUES (70873, 'spell_valithria_vigor'), (71941, 'spell_valithria_vigor');
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (71157, 29306);
-INSERT INTO `spell_script_names` VALUES (71157,  'spell_rotface_plagued_zombie_infected_wound'), (29306, 'spell_rotface_plagued_zombie_infected_wound');
+REPLACE INTO `spell_script_names` VALUES (71157,  'spell_rotface_plagued_zombie_infected_wound'), (29306, 'spell_rotface_plagued_zombie_infected_wound');
 
 REPLACE INTO `spell_script_names` VALUES (70766, 'spell_dream_state');
 
@@ -1019,7 +1020,7 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_icc_valithria_gluttonous_abom
 UPDATE `creature_template` SET `ScriptName` = 'npc_icc_valithria_rot_worm' WHERE `entry` = 37907;
 UPDATE `creature_template` SET `type_flags` = 0 WHERE `entry` IN (37907, 38168, 38726, 38736);
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (70912, 70913, 70914, 70915, 70916);
-INSERT INTO `spell_script_names` VALUES
+REPLACE INTO `spell_script_names` VALUES
 (70912,'spell_valithria_summon_adds'),
 (70913,'spell_valithria_summon_adds'),
 (70914,'spell_valithria_summon_adds'),
@@ -1038,7 +1039,7 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_icc_valithria_gluttonous_abom
 UPDATE `creature_template` SET `ScriptName` = 'npc_icc_valithria_mana_void' WHERE `entry` = 38068;
 UPDATE `creature_template` SET `ScriptName` = 'npc_icc_valithria_rot_worm' WHERE `entry` = 37907;
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (70912, 70913, 70914, 70915, 70916);
-INSERT INTO `spell_script_names` VALUES
+REPLACE INTO `spell_script_names` VALUES
 (70912,'spell_valithria_summon_adds'),
 (70913,'spell_valithria_summon_adds'),
 (70914,'spell_valithria_summon_adds'),
@@ -1071,17 +1072,17 @@ UPDATE `gameobject_template` SET `flags`=32,`faction`=114 WHERE `entry`=201722; 
 
 -- Conditions
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=70598;
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`Comment`) VALUES
+REPLACE INTO `conditions` (`SourceTypeOrReferenceId`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`Comment`) VALUES
 (13,70598,18,1, 'Sindragosa''s Fury - player targets');
 -- Fragment of the Nightmare's Corruption drops 100% as of patch 3.0.2
 UPDATE `creature_loot_template` SET `ChanceOrQuestChance`=-100 WHERE `item` IN (21146,21147,21148,21149);
 -- Insert loot for Gently Shaken Gift
 DELETE FROM `item_loot_template` WHERE `entry`=21271;
-INSERT INTO `item_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+REPLACE INTO `item_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
 (21271,21241,100,1,0,5,5);
 
 DELETE FROM `achievement_criteria_data` WHERE `criteria_id` IN (12822,12996,12972,12989,12758,12955,13049,13060,13102,13133,13134,13135);
-INSERT INTO `achievement_criteria_data` (`criteria_id`,`type`,`value1`,`value2`,`ScriptName`) VALUES
+REPLACE INTO `achievement_criteria_data` (`criteria_id`,`type`,`value1`,`value2`,`ScriptName`) VALUES
 (12822,11,0,0, 'achievement_all_you_can_eat'), -- All You Can Eat (10 player)
 (12822,12,0,0, ''), -- All You Can Eat (10 player)
 (12996,11,0,0, 'achievement_all_you_can_eat'), -- All You Can Eat (10 player) Heroic
@@ -1099,13 +1100,13 @@ INSERT INTO `achievement_criteria_data` (`criteria_id`,`type`,`value1`,`value2`,
 (13134,12,2,0, ''), -- Sindragosa kills (Heroic Icecrown 10 player)
 (13135,12,3,0, ''); -- Sindragosa kills (Heroic Icecrown 25 player)
 DELETE FROM `areatrigger_scripts` WHERE `entry` IN (5604,5698,5649);
-INSERT INTO `areatrigger_scripts` (`entry`,`ScriptName`) VALUES
+REPLACE INTO `areatrigger_scripts` (`entry`,`ScriptName`) VALUES
 (5604, 'at_sindragosa_lair'),
 (5698, 'at_icc_saurfang_portal'),
 (5649, 'at_icc_shutdown_traps');
 
 DELETE FROM `creature_text` WHERE `entry`=36853;
-INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+REPLACE INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
 (36853,0,0, 'You are fools to have come to this place! The icy winds of Northrend will consume your souls!',1,0,0,0,0,17007, 'Sindragosa - SAY_AGGRO'),
 (36853,1,0, 'Suffer, mortals, as your pathetic magic betrays you!',1,0,0,0,0,17014, 'Sindragosa - SAY_UNCHAINED_MAGIC'),
 (36853,2,0, '%s prepares to unleash a wave of blistering cold!',3,0,0,0,0,0, 'Sindragosa - EMOTE_WARN_BLISTERING_COLD'),
@@ -1124,7 +1125,7 @@ UPDATE `creature_template` SET `ScriptName`='npc_spinestalker' WHERE `entry`=375
 UPDATE `creature_template` SET `ScriptName`='npc_rimefang_icc' WHERE `entry`=37533;
 UPDATE `creature_template` SET `ScriptName`='npc_sindragosa_trash' WHERE `entry` IN (37531,37532);
 DELETE FROM `spell_linked_spell` WHERE `spell_trigger` IN (70117,70157);
-INSERT INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment`) VALUES
+REPLACE INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment`) VALUES
 (70117,70122,1, 'Sindragosa - Icy Grip'),
 (70157,69700,2, 'Sindragosa - Ice Tomb resistance');
 DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_frostwarden_handler_order_whelp';
@@ -1138,7 +1139,7 @@ DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sindragosa_ice_tomb';
 DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sindragosa_ice_tomb_dummy';
 DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sindragosa_ice_tomb_trap';
 DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sindragosa_collision_filter';
-INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+REPLACE INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 (71357,'spell_frostwarden_handler_order_whelp'),
 (71350,'spell_frostwarden_handler_focus_fire'),
 (71376,'spell_rimefang_icy_blast'),
@@ -1161,7 +1162,7 @@ INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 
 -- Teleports
 DELETE FROM `npc_text` WHERE `id` BETWEEN 800000 AND 800006;
-INSERT INTO `npc_text` (`id`, `text0_0`) VALUES
+REPLACE INTO `npc_text` (`id`, `text0_0`) VALUES
 (800000, 'Teleport to the Light\'s Hammer'),
 (800001, 'Teleport to the Oratory of the Damned.'), 
 (800002, 'Teleport to the Rampart of Skulls.'),
@@ -1170,7 +1171,7 @@ INSERT INTO `npc_text` (`id`, `text0_0`) VALUES
 (800005, 'Teleport to the Sindragosa\'s Lair'),
 (800006, 'Teleport to The Frozen Throne');
 DELETE FROM `locales_npc_text` WHERE `entry` BETWEEN 800000 AND 800006;
-INSERT INTO `locales_npc_text` (`entry`, `Text0_0_loc8`) VALUES
+REPLACE INTO `locales_npc_text` (`entry`, `Text0_0_loc8`) VALUES
 (800000, '????? ?????'),
 (800001, '???????? ?????????'),
 (800002, '???????? ???'),
@@ -1183,7 +1184,7 @@ INSERT INTO `locales_npc_text` (`entry`, `Text0_0_loc8`) VALUES
 UPDATE `gameobject_template` SET `ScriptName` = 'go_icc_spirit_alarm' WHERE `entry` IN (201814, 201815, 201816, 201817);
 
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (70536, 70545, 70546, 70547);
-INSERT INTO `spell_script_names` VALUES
+REPLACE INTO `spell_script_names` VALUES
 (70546, 'spell_icc_spirit_alarm'),
 (70536, 'spell_icc_spirit_alarm'),
 (70545, 'spell_icc_spirit_alarm'),
@@ -1192,7 +1193,7 @@ REPLACE INTO `spell_script_names` VALUES (70461, 'spell_coldflame_trap');
 UPDATE `gameobject_template` SET `ScriptName` = 'go_icc_plagueworks_valve' WHERE `entry` IN (201615, 201616);
 
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (70536, 70545, 70546, 70547);
-INSERT INTO `spell_script_names` VALUES
+REPLACE INTO `spell_script_names` VALUES
 (70546, 'spell_icc_spirit_alarm'),
 (70536, 'spell_icc_spirit_alarm'),
 (70545, 'spell_icc_spirit_alarm'),
@@ -1226,19 +1227,19 @@ UPDATE `creature_template` SET `vehicleid` = 533 WHERE `entry` IN (36609, 39120,
 UPDATE `creature_template` SET `modelid1` = 11686 WHERE `entry` IN (36633, 39305, 39306, 39307);
 
 DELETE FROM `creature_template_addon` WHERE (`entry`=36597);
-INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (36597, 0, 0, 1, 0, 0, '73878 0 72846 0');
+REPLACE INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (36597, 0, 0, 1, 0, 0, '73878 0 72846 0');
 DELETE FROM `creature_template_addon` WHERE (`entry`=39166);
-INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (39166, 0, 0, 1, 0, 0, '73878 0 72846 0');
+REPLACE INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (39166, 0, 0, 1, 0, 0, '73878 0 72846 0');
 DELETE FROM `creature_template_addon` WHERE (`entry`=39167);
-INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (39167, 0, 0, 1, 0, 0, '73878 0 72846 0');
+REPLACE INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (39167, 0, 0, 1, 0, 0, '73878 0 72846 0');
 DELETE FROM `creature_template_addon` WHERE (`entry`=39168);
-INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (39168, 0, 0, 1, 0, 0, '73878 0 72846 0');
+REPLACE INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (39168, 0, 0, 1, 0, 0, '73878 0 72846 0');
 UPDATE `creature_template` SET `faction_A` = 14, `faction_H` = 14 WHERE `entry` IN (36597, 39166, 39167, 39168);
 
 -- Temp solution for frostmourn room
-INSERT INTO `gameobject` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`) VALUES
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`) VALUES
 ('2710388', '193070', '631', '15', '1', '520', '-2524', '1038.42', '4.47344', '0', '0', '0.786348', '-0.617784', '300', '255', '1');
-INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
 ('250250', '36823', '631', '15', '1', '0', '0', '495', '-2502', '1050', '5.49385', '300', '0', '0', '315000', '59910', '0', '0', '0', '0', '0'),
 ('250251', '36824', '631', '15', '1', '0', '0', '495', '-2546', '1050.23', '1.72709', '300', '0', '0', '252000', '0', '0', '0', '0', '0', '0');
 
@@ -1256,7 +1257,7 @@ UPDATE `creature_template` SET `dmg_multiplier` = 35 WHERE `entry` = 36823; -- T
 -- The Frozen Throne (25 player) 
 -- The Light of Dawn (25 player heroic)
 DELETE FROM `achievement_criteria_data` where `criteria_id` IN (12825,12818,12764,12909,12826);
-INSERT INTO `achievement_criteria_data` (`criteria_id`, `type`, `value1`, `value2`, `ScriptName`) VALUES
+REPLACE INTO `achievement_criteria_data` (`criteria_id`, `type`, `value1`, `value2`, `ScriptName`) VALUES
 (12825, 12, 2, 0, ''),
 (12818, 12, 3, 0, ''),
 (12764, 12, 0, 0, ''),
@@ -1302,14 +1303,14 @@ UPDATE `creature_template` SET `ScriptName`='npc_muradin_bronzebeard_icc' WHERE 
 UPDATE `creature_template` SET `ScriptName`='npc_saurfang_event' WHERE `entry` IN (37920,37830);
 DELETE FROM `achievement_criteria_data` WHERE `criteria_id` IN (12778,13036,13035,13037) AND `type` IN (0,11);
 DELETE FROM `achievement_criteria_data` WHERE `criteria_id` IN (12778,13036,13035,13037) AND `type` IN (0,11);
-INSERT INTO `achievement_criteria_data` (`criteria_id`,`type`,`value1`,`value2`,`ScriptName`) VALUES
+REPLACE INTO `achievement_criteria_data` (`criteria_id`,`type`,`value1`,`value2`,`ScriptName`) VALUES
 (12778,11,0,0, 'achievement_ive_gone_and_made_a_mess'),
 (13036,11,0,0, 'achievement_ive_gone_and_made_a_mess'),
 (13035,11,0,0, 'achievement_ive_gone_and_made_a_mess'),
 (13037,11,0,0, 'achievement_ive_gone_and_made_a_mess');
 -- [10468] ICC texts (Shauren)
 DELETE FROM `creature_text` WHERE `entry` IN (36612,36626,36627,36678,36855,37187,37188,37200,37813,37879,37970,37972,37973,38004);
-INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`sound`,`language`,`probability`,`emote`,`duration`,`comment`) VALUES
+REPLACE INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`sound`,`language`,`probability`,`emote`,`duration`,`comment`) VALUES
 (36612,0,0,'This is the beginning AND the end, mortals. None may enter the master''s sanctum!',1,16950,0,0,0,0,'Lord Marrowgar - SAY_ENTER_ZONE'),
 (36612,1,0,'The Scourge will wash over this world as a swarm of death and destruction!',1,16941,0,0,0,0,'Lord Marrowgar - SAY_AGGRO'),
 (36612,2,0,'BONE STORM!',1,16946,0,0,0,0,'Lord Marrowgar - SAY_BONE_STORM'),
@@ -1453,7 +1454,7 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`sound`,`langu
 
 -- Conditions
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry` IN (70572,72202);
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES 
+REPLACE INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES 
 (13,0,70572,0,18,1,37920,0,0, '', 'Deathbringer Saurfang - Grip of Agony'),
 (13,0,70572,0,18,1,37200,0,0, '', 'Deathbringer Saurfang - Grip of Agony'),
 (13,0,70572,0,18,1,37187,0,0, '', 'Deathbringer Saurfang - Grip of Agony'),
@@ -1461,7 +1462,7 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 (13,0,72202,0,18,1,37813,0,0, '', 'Deathbringer Saurfang - Blood Link');  
 -- [9607] Deathbringer Saurfang Additional Data (By Shauren)
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=72260;
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+REPLACE INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
 (13,0,72260,0,18,1,37920,0,0, '', 'Deathbringer Saurfang - Mark of the Fallen Champion heal');
 
 -- [9607] Deathbringer Saurfang (By Shauren)

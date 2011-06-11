@@ -5,8 +5,8 @@ INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entr
 ('151002','0','0','0','0','0','11686','0','0','0','Mana Bonus','Increase Mana',NULL,'0','80','80','0','16','16','0','1','1.14286','1','0','4','5','0','30','1','2000','0','1','0','0','0','0','0','0','0','2','3','100','7','0','38','38','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','7','','1','3','1','1','1','0','752','0','0','0','0','0','100','1','0','0','0','npc_mk_bonus',NULL),
 ('151003','0','0','0','0','0','11686','0','0','0','Health Bonus','Restore Health',NULL,'0','80','80','0','16','16','0','1','1.14286','1','0','4','5','0','30','1','2000','0','1','0','0','0','0','0','0','0','2','3','100','7','0','38','38','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','7','','1','3','1','1','1','0','752','0','0','0','0','0','100','1','0','0','0','npc_mk_bonus',NULL);
 
-DELETE FROM `creature` WHERE `id` = '151000';
-INSERT INTO `creature` VALUES (NULL,151000,0,1,1,0,0,-13203.5,275.29,35,4.24,300,0,0,5342,0,0,0);-- Visible Solo para Gm's
+-- DELETE FROM `creature` WHERE `id` = '151000';
+-- INSERT INTO `creature` VALUES (NULL,151000,0,1,1,0,0,-13203.5,275.29,35,4.24,300,0,0,5342,0,0,0);-- Visible Solo para Gm's
 
 INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`)
 VALUES

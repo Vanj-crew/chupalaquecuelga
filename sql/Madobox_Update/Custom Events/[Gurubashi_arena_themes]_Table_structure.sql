@@ -56,7 +56,7 @@ CREATE TABLE `gurubashi_spawns_gameobject` (
 -- Records of gurubashi_spawns_gameobject
 -- ----------------------------
 DELETE FROM `gurubashi_spawns_gameobject` WHERE `theme` IN (1,2,3);
-INSERT INTO `gurubashi_spawns_gameobject`(`theme`,`x`,`y`,`z`,`o`,`entry`,`entry`)  VALUES
+INSERT INTO `gurubashi_spawns_gameobject`(`theme`,`x`,`y`,`z`,`o`,`entry`)  VALUES
 ('1', '-13205.8', '274.844', '27.6802', '4.30156', '6000118'),
 ('1', '-13168', '275.081', '21.8574', '2.72372', '6000117'),
 ('1', '-13205.5', '274.828', '30.32', '4.27407', '6000110'),
@@ -240,7 +240,7 @@ CREATE TABLE `gurubashi_themes` (
 -- Records of gurubashi_themes
 -- ----------------------------
 DELETE FROM `gurubashi_themes` WHERE `id` IN (1,2,3,4);
-INSERT INTO `gurubashi_themes`(`id`,`giver`,`name`,`id`) VALUES 
+INSERT INTO `gurubashi_themes`(`id`,`giver`,`name`) VALUES 
 ('1', '100001', 'Marsh Theme'),
 ('2', '100001', 'Elwynn Theme'),
 ('3', '100001', 'Winter Theme'),
