@@ -130,7 +130,7 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceEntry`,`ConditionType
 (13,63983,18,1,32933, 'Arm Sweep (25N) Target');
 
 UPDATE `creature_template` SET `ScriptName`='npc_kologarn_arm' WHERE `entry` IN (32933,32934);
-UPDATE `creature_template` SET `flags_extra`='flags_extra'|2 WHERE `entry`=33661;
+UPDATE `creature_template` SET `flags_extra`=flags_extra|2 WHERE `entry`=33661;
 UPDATE `creature_template` SET `minlevel`=83, `maxlevel`=83 WHERE `entry`=33909;
 
 -- Swap trigger model ids
@@ -676,7 +676,7 @@ INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 UPDATE `creature_template` SET `difficulty_entry_1`=34114 WHERE `entry`=33855;
 UPDATE `creature_template` SET `faction_A`=16, `faction_H`=16, `dmg_multiplier`=15 WHERE `entry`=34114;
 
-?DELETE FROM `conditions` WHERE `SourceEntry`=62834 AND `SourceTypeOrReferenceId`=13 AND `ConditionTypeOrReference`=18;
+DELETE FROM `conditions` WHERE `SourceEntry`=62834 AND `SourceTypeOrReferenceId`=13 AND `ConditionTypeOrReference`=18;
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`Comment`) VALUES
 (13,62834,18,1,0, 'Boombot Boom - Player target'),
 (13,62834,18,1,33343, 'Boombot Boom - Scrapbot target'),
