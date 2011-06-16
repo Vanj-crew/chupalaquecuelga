@@ -473,6 +473,8 @@ public:
                     uiAlgalonGUID = creature->GetGUID();
                     if (uiAlgalonCountdown < 62)
                         creature->setFaction(7);
+                    else
+                        creature->SetVisible(false);
                     break;
             }
 
@@ -777,7 +779,10 @@ public:
                     {
                         case SPECIAL:
                             if (Creature* algalon = instance->GetCreature(uiAlgalonGUID))
+                            {
                                 algalon->setFaction(7);
+                                algalon->SetVisible(true);
+                            }
                             HandleGameObject(uiAlgalonDoor1GUID, true);
                             HandleGameObject(uiAlgalonDoor2GUID, true);
                             uiAlgalonCountdown = 61;
@@ -1007,7 +1012,7 @@ public:
                 }
                 uint32 tmpState, tmpState2, tmpState3;
                 loadStream >> tmpState >> tmpState2 >> tmpState3;
-                // tmpState == GetData(TYPE_COLOSSUS) (?)
+                uiEncounter[TYPE_COLOSSUS] = tmpState;
                 uiPlayerDeathFlag = tmpState2;
                 uiAlgalonCountdown = tmpState3;
             }
