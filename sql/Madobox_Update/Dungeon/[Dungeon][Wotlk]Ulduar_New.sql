@@ -1120,3 +1120,6 @@ DELETE FROM `spell_script_names` WHERE `spell_id` IN (65044,65045);
 INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 (65044, 'spell_flame_leviathan_flames'),
 (65045, 'spell_flame_leviathan_flames');
+
+UPDATE `creature_template` SET `ScriptName`='mob_rune_of_power' WHERE `entry`=33705;
+UPDATE `gameobject_template` SET `data15`=1 WHERE `entry` IN (194158,194159);
