@@ -43,6 +43,7 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_power_spark' WHERE `entry` = 
 UPDATE `creature_template` SET `ScriptName` = 'npc_vortex_vehicle' WHERE `entry` = 30090;
 -- Focusing iris
 UPDATE `gameobject_template` SET `ScriptName` = 'go_focusing_iris' WHERE `entry` IN (193958, 193960);
+UPDATE `creature_template` SET `ScriptName`='npc_alexstrasza' WHERE entry=32295;
 -- Can fly
 UPDATE `creature_template` SET `InhabitType` = 7 WHERE `entry` IN (28859, 30090, 30118, 30234, 30248, 30592, 31734, 31748, 31749);
 -- Immunitys
@@ -68,3 +69,11 @@ INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 -- Portal Entrance wrong fix. (testing)
 -- UPDATE `areatrigger_teleport` SET `target_position_x` = 2735.745850, `target_position_y` = 1321.490356, `target_position_z` = 266.171051, `target_orientation` = 5.414711 WHERE `id` = 5290;
 
+UPDATE `creature_template` SET `dmg_multiplier`=40 WHERE `entry`=28859;
+UPDATE `creature_template` SET `dmg_multiplier`=70 WHERE `entry`=31734;
+UPDATE `creature_template` SET `dmg_multiplier`=20 WHERE `entry`=30245;
+UPDATE `creature_template` SET `dmg_multiplier`=30 WHERE `entry`=31750;
+
+UPDATE `gameobject_loot_template` SET `item`=40753 WHERE `entry`=26097 AND `item`=47241;
+
+UPDATE `npc_spellclick_spells` SET `spell_id`=46598 WHERE `npc_entry`=31748;

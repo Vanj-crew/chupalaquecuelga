@@ -412,7 +412,7 @@ DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=63
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`) VALUES
 (13,63322,18,1,0);
 
-?UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask` &~ 1024 WHERE `entry` IN (33113,34003);
+UPDATE `creature_template` SET `mechanic_immune_mask`=mechanic_immune_mask &~ 1024 WHERE `entry` IN (33113,34003);
 DELETE FROM spell_script_names WHERE spell_id = 63278;
 INSERT INTO spell_script_names VALUE (63278,'spell_general_vezax_mark_of_the_faceless_spell');
 
@@ -982,8 +982,8 @@ UPDATE `creature_loot_template` SET `item`=45624 WHERE `entry`=33955 AND `item`=
 
 UPDATE `creature_template` SET `mechanic_immune_mask`=650854239 WHERE `entry` IN (33113,34003, 33118,33190, 33293,33885, 32867,33693, 32927,33692, 32930,33909, 32933,33910, 32934,33911, 34014,34166, 32906,33360, 33203,33376, 33228,33385, 32915,33391, 32913,33392, 32914,33393, 33524,34152, 33288,33955, 32871,33070, 33121,33191);
 UPDATE `creature_template` SET `mechanic_immune_mask`=617299803 WHERE `entry` IN (33515,34175, 33271,33449);
-UPDATE `creature_template` SET `mechanic_immune_mask`=617297755, `flags_extra`=`flags_extra`|0x100000 WHERE `entry` IN (34035,34171, 32857,33694);
-UPDATE `creature_template` SET `flags_extra`=`flags_extra`|1 WHERE `entry` IN (33909,33391,33392,33393,33449,33955);
+UPDATE `creature_template` SET `mechanic_immune_mask`=617297755, `flags_extra`=flags_extra|0x100000 WHERE `entry` IN (34035,34171, 32857,33694);
+UPDATE `creature_template` SET `flags_extra`=flags_extra|1 WHERE `entry` IN (33909,33391,33392,33393,33449,33955);
 -- Flame Leviathan
 UPDATE `creature_model_info` SET `bounding_radius`=0.93, `combat_reach`=10 WHERE `modelid`=28875;
 -- Molgeim
@@ -1071,3 +1071,53 @@ INSERT INTO `creature` VALUES
 (@GUID+62,33214,603,3,1,28830,0,283.89,-68.7223,496.885,4.88278,150,50,0,6000,0,0,1,0,0,0),
 (@GUID+63,33214,603,3,1,28830,0,270.921,6.65616,500.337,4.88278,150,50,0,6000,0,0,1,0,0,0),
 (@GUID+64,33214,603,3,1,28830,0,266.205,34.0651,492.053,4.67229,150,50,0,6000,0,0,1,0,0,0);
+
+DELETE FROM `spell_script_names` WHERE `spell_id`=62374;
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(62374, 'spell_pursued');
+
+-- make Orbital Support trigger and passive
+UPDATE `creature_template` SET `flags_extra`=130 WHERE `entry`=34286;
+
+DELETE FROM `spell_script_names` WHERE `spell_id`=63278;
+INSERT INTO `spell_script_names` VALUE (63278, 'spell_general_vezax_mark_of_the_faceless_drain');}
+
+DELETE `FROM spell_script_names` WHERE `spell_id` IN (63489,62274);
+INSERT `INTO spell_script_names`
+VALUES 
+(63489,'spell_shield_of_runes'),
+(62274,'spell_shield_of_runes');
+
+DELETE FROM `spell_script_names` WHERE `spell_id` IN (62359,64979);
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(64979, 'spell_anti_air_rocket'),
+(62359, 'spell_anti_air_rocket');
+
+UPDATE `creature_template` SET `ScriptName`='' WHERE `entry`=33218;
+UPDATE `creature_template` SET `ScriptName`='npc_liquid_pyrite' WHERE `entry`=33189;
+
+UPDATE `creature` SET `id`=33214 WHERE `id`=33218;
+UPDATE `creature` SET `spawndist`=50, `MovementType`=1 WHERE `id`=33214;
+
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=62363;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`) VALUES
+(13, 62363, 18, 1, 33214);
+
+UPDATE `creature_template` SET `flags_extra`=2 WHERE `entry`=33571;
+UPDATE `creature_template` SET `ScriptName`='npc_pool_of_tar' WHERE `entry`=33090;
+
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry` IN (65044,65045);
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`) VALUES
+(13,65044,18,1,33090),
+(13,65045,18,1,33090),
+(13,65044,18,1,33060),
+(13,65045,18,1,33060),
+(13,65044,18,1,33062),
+(13,65045,18,1,33062),
+(13,65044,18,1,33109),
+(13,65045,18,1,33109);
+
+DELETE FROM `spell_script_names` WHERE `spell_id` IN (65044,65045);
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(65044, 'spell_flame_leviathan_flames'),
+(65045, 'spell_flame_leviathan_flames');
