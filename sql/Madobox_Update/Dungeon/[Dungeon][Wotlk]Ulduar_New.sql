@@ -1080,11 +1080,10 @@ INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 UPDATE `creature_template` SET `flags_extra`=130 WHERE `entry`=34286;
 
 DELETE FROM `spell_script_names` WHERE `spell_id`=63278;
-INSERT INTO `spell_script_names` VALUE (63278, 'spell_general_vezax_mark_of_the_faceless_drain');}
+INSERT INTO `spell_script_names` VALUES (63278, 'spell_general_vezax_mark_of_the_faceless_drain');
 
-DELETE `FROM spell_script_names` WHERE `spell_id` IN (63489,62274);
-INSERT `INTO spell_script_names`
-VALUES 
+DELETE FROM `spell_script_names` WHERE `spell_id` IN (63489,62274);
+INSERT INTO `spell_script_names` VALUES 
 (63489,'spell_shield_of_runes'),
 (62274,'spell_shield_of_runes');
 

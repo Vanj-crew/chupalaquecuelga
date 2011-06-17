@@ -805,10 +805,10 @@ public:
     }
 };
 
+
 void AddSC_trial_of_the_champion()
 {
     new npc_anstart();
     new npc_announcer_toc5();
     new spell_gen_atcharge();
-    new spell_gen_npcshieldbreaker();
 }

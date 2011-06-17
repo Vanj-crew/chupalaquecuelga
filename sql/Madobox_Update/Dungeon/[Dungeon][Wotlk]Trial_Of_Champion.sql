@@ -1,6 +1,5 @@
 DELETE FROM `spell_script_names` WHERE `spell_id` IN (63010,68504,66515);
 INSERT INTO `spell_script_names` VALUES
---('62575', 'spell_gen_shieldbreaker'),
 ('63010', 'spell_gen_atcharge'),
 ('68504', 'spell_gen_npcshieldbreaker'),
 ('66515', 'spell_gen_reflective_shield');
