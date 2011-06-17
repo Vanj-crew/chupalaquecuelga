@@ -2588,7 +2588,6 @@ public:
 void AddSC_Argen_Tournament()
 {
     new npc_chillmaw;
-    new npc_quest_givers_for_crusaders;
     new spell_tournament_charge;
     new spell_tournament_shield;
     new spell_tournament_melee;
