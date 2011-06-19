@@ -2847,4 +2847,7 @@ void AddSC_Argen_Tournament()
     new npc_apprentice_osterkilgr;
     new npc_dying_soldier;
     new npc_dying_berserker;
+    new npc_lake_frog;
+    new npc_maiden_of_ashwood_lake;
+    new npc_maiden_of_drak_mar;
 }
