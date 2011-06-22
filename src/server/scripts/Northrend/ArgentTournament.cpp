@@ -1810,9 +1810,9 @@ public:
                     DoScriptText(SAY_END_VALIANT , me);
                     uiDamage = 0;
 
-                    if(pDoneBy->GetOwner())
+                    if (pDoneBy->GetOwner())
                         (pDoneBy->GetOwner())->ToPlayer()->KilledMonsterCredit(NPC_ARGENT_CHAMPION_CREDIT,0);
-                    if(pDoneBy->GetTypeId() == TYPEID_PLAYER)
+                    if (pDoneBy->GetTypeId() == TYPEID_PLAYER)
                         pDoneBy->ToPlayer()->KilledMonsterCredit(NPC_ARGENT_CHAMPION_CREDIT,0);
                     
                     me->setFaction(35);
@@ -2474,7 +2474,7 @@ public:
                     {
                         if (pPlayer->GetQuestStatus(new_quest[i].quest_id) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasAura(SPELL_WARTSBGONE_LIP_BALM))
                             pPlayer->AddAura(SPELL_WARTS,pPlayer);
-                        else if(roll_chance_i(10))
+                        else if (roll_chance_i(10))
                         {
                             //if (Unit* pMaidem = me->SummonCreature(NPC_MAIDEN_OF_ASHWOOD_LAKE,me->GetPositionX(),me->GetPositionY(),me->GetPositionZ(),0,TEMPSUMMON_TIMED_DESPAWN,30000))
                             //{
@@ -2519,7 +2519,7 @@ public:
 
     bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if(!pPlayer->HasItemCount(44981,1,true))
+        if (!pPlayer->HasItemCount(44981,1,true))
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HELLO_MAIDEN, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
             pPlayer->SEND_GOSSIP_MENU(MAIDEN_DEFAULT_TEXTID, pCreature->GetGUID());
@@ -2534,7 +2534,7 @@ public:
     bool OnGossipSelect(Player* pPlayer, Creature* pCreature /*pCreature*/, uint32 /*uiSender*/, uint32 uiAction)
     {
         pPlayer->PlayerTalkClass->ClearMenus();
-        switch(uiAction)
+        switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 pPlayer->CastSpell(pPlayer,SPELL_SUMMON_ASHWOOD_BRAND,true);
@@ -2574,7 +2574,7 @@ public:
         {
             phase = 0;
             uiPhaseTimer = MAIDEN_OF_DRAK_MAR_TIMER_00;
-            if(GameObject* go = me->SummonGameObject(MAIDEN_OF_DRAK_MAR_GOB_01,4602.977f,-1600.141f,156.7834f,0.7504916f,0,0,0,0,0))
+            if (GameObject* go = me->SummonGameObject(MAIDEN_OF_DRAK_MAR_GOB_01,4602.977f,-1600.141f,156.7834f,0.7504916f,0,0,0,0,0))
                 firstGobGuid = go->GetGUID();
         }
 

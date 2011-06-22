@@ -493,8 +493,6 @@ INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equip
 ('33499','571','1','1','0','1858','5421.02','149.316','150.516','0.0583642','300','5','0','12175','0','0','1'),
 ('33499','571','1','1','0','1858','5443.25','371.767','163.366','4.35449','300','5','0','12175','0','0','1');
 
-
-
 SET @Guid=1000141; -- SELECT creature.guid FROM creature ORDER BY creature.guid DESC LIMIT 1;
 DELETE FROM `creature` WHERE id=33429;
 INSERT INTO `creature` (guid,id,map,spawnMask,phaseMask,modelid,equipment_id,position_x,position_y,position_z,orientation,spawntimesecs,spawndist,currentwaypoint,curhealth,curmana,DeathState,MovementType,npcflag,unit_flags,dynamicflags) VALUES
@@ -506,7 +504,6 @@ INSERT INTO `creature` (guid,id,map,spawnMask,phaseMask,modelid,equipment_id,pos
 (@Guid+5,33429,571,1,256,0,0,6242.42,2246.47,491.941,0.56266,120,0,0,1,0,0,0,0,0,0),
 (@Guid+6,33429,571,1,256,0,0,6202.35,2284.08,495.286,0.488692,120,0,0,1,0,0,0,0,0,0),
 (@Guid+7,33429,571,1,256,0,0,6145.68,2208.17,512.426,0.488692,120,0,0,1,0,0,0,0,0,0);
-
 -- Template updates for creature 33429 (Boneguard Lieutenant)
 UPDATE `creature_template` SET speed_run=2 WHERE entry=33429; -- Boneguard Lieutenant
 -- Model data 29098 (creature 33429 (Boneguard Lieutenant))
