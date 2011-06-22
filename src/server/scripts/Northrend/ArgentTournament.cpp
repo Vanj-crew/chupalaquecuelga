@@ -20,6 +20,7 @@
 #include "SpellAuraEffects.h"
 #include "ScriptMgr.h"
 #include "Group.h"
+#include "ScriptedFollowerAI.h"
 
 /*######
 ## Quest Soporte Threat From Above
