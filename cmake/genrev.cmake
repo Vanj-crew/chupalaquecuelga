@@ -21,12 +21,7 @@ find_program(_GIT_EXEC
 )
 
 if(_GIT_EXEC)
-  execute_process(
-    COMMAND "${_GIT_EXEC}" --version
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-    OUTPUT_VARIABLE _GIT_VERSION
-    ERROR_QUIET
-  )
+  set(rev_info "${REV_INFO}")
 
   # make sure we're using minimum the required version of git, so the "dirty-testing" will work properly
   ensure_version( "${_REQUIRED_GIT_VERSION}" "${_GIT_VERSION}" _GIT_VERSION_OK)
