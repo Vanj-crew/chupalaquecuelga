@@ -872,7 +872,6 @@ class spell_algalon_phased : public SpellScriptLoader
             {
                 OnEffectApply += AuraEffectRemoveFn(spell_algalon_phased_AuraScript::OnApplyOrRemove, EFFECT_0, SPELL_AURA_PHASE, AURA_EFFECT_HANDLE_REAL);
                 OnEffectRemove += AuraEffectRemoveFn(spell_algalon_phased_AuraScript::OnApplyOrRemove, EFFECT_0, SPELL_AURA_PHASE, AURA_EFFECT_HANDLE_REAL);
-
             }
         };
 

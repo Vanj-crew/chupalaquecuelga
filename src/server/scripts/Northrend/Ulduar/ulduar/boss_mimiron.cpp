@@ -726,7 +726,7 @@ public:
         Phases phase;
         EventMap events;
         bool MimironHardMode;
-        
+
         void RemoveAllAurasButNotPassenger()
         {
             while (!me->GetAppliedAuras().empty() || !me->GetOwnedAuras().empty())
@@ -1115,7 +1115,7 @@ public:
                 }
                 if(aurasremoved == 0) break; // Beende Schleife wenn keine Auren mehr entfernt wurden 
             }
-        }
+        }        
 
         void Reset()
         {
@@ -1458,7 +1458,7 @@ public:
                 }
                 if(aurasremoved == 0) break; // Beende Schleife wenn keine Auren mehr entfernt wurden 
             }
-        }
+        }   
 
         void Reset()
         {
