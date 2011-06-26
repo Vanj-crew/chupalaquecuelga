@@ -62,3 +62,6 @@ INSERT INTO `npc_spellclick_spells` (`npc_entry`,`spell_id`,`quest_start`,`quest
 
 UPDATE creature_template SET speed_run=0 WHERE entry IN (36355,36357);
 UPDATE creature_template SET npcflag=16777216 WHERE entry IN (34793,35273,35069,34776,34802,35431,35413,35419,35433,35421);
+
+DELETE FROM `spell_script_names` WHERE `spell_id`=66218;
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES (66218,'spell_gen_launch');

@@ -1177,28 +1177,28 @@ UPDATE `quest_template` SET `PrevQuestId`=13816, `NextQuestId`=13818, `Exclusive
 -- Ignis
 UPDATE `creature_template` SET `mingold`=1190671, `maxgold`=1190671 WHERE `entry`=33118;
 UPDATE `creature_template` SET `mingold`=1190671*2.5, `maxgold`=1190671*2.5 WHERE `entry`=33190;
-- Razorscale
+-- Razorscale
 UPDATE `creature_template` SET `mingold`=325206, `maxgold`=325206 WHERE `entry`=33186;
 UPDATE `creature_template` SET `mingold`=325206*2.5, `maxgold`=325206*2.5 WHERE `entry`=33724;
-- XT-002
+-- XT-002
 UPDATE `creature_template` SET `mingold`=713762, `maxgold`=713762 WHERE `entry`=33293;
 UPDATE `creature_template` SET `mingold`=713762*2.5, `maxgold`=713762*2.5 WHERE `entry`=33885;
-- Steelbreaker
+-- Steelbreaker
 UPDATE `creature_template` SET `mingold`=1717186, `maxgold`=1717186 WHERE `entry`=32867;
 UPDATE `creature_template` SET `mingold`=1717186*2.5, `maxgold`=1717186*2.5 WHERE `entry`=33693;
-- Molgeim
+-- Molgeim
 UPDATE `creature_template` SET `mingold`=1763054, `maxgold`=1763054 WHERE `entry`=32927;
 UPDATE `creature_template` SET `mingold`=1763054*2.5, `maxgold`=1763054*2.5 WHERE `entry`=33692;
-- Brundir
+-- Brundir
 UPDATE `creature_template` SET `mingold`=1791922, `maxgold`=1791922 WHERE `entry`=32857;
 UPDATE `creature_template` SET `mingold`=1791922*2.5, `maxgold`=1791922*2.5 WHERE `entry`=33694;
-- Auriaya
+-- Auriaya
 UPDATE `creature_template` SET `mingold`=1366181, `maxgold`=1366181 WHERE `entry`=33515;
 UPDATE `creature_template` SET `mingold`=1366181*2.5, `maxgold`=1366181*2.5 WHERE `entry`=34175;
-- Vezax
+-- Vezax
 UPDATE `creature_template` SET `mingold`=1810711, `maxgold`=1810711 WHERE `entry`=33271;
 UPDATE `creature_template` SET `mingold`=1810711*2.5, `maxgold`=1810711*2.5 WHERE `entry`=33449;
-- Yogg-Saron
+-- Yogg-Saron
 UPDATE `creature_template` SET `mingold`=2128378, `maxgold`=2128378 WHERE `entry`=33288;
 UPDATE `creature_template` SET `mingold`=2128378*2.5, `maxgold`=2128378*2.5 WHERE `entry`=33955;
 -- Ulduar Proc Trinket's
@@ -1226,34 +1226,7 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `positi
 ('400007','194200','603','1','1','1966.07','-220.64','432.687','0.465871','0','0','0.230835','0.972993','604800','0','1'),
 ('400008','194201','603','2','1','1966.07','-220.64','432.687','0.465871','0','0','0.230835','0.972993','604800','0','1');
 
-
--- Fix Gold Loot of Ulduar
-SET @Gold_10_Trash_min  :=100000;
-SET @Gold_10_Trash_max  :=@Gold_10_Trash_min*1.5;
-SET @Gold_25_Trash_min  :=250000;
-SET @Gold_25_Trash_max  :=@Gold_25_Trash_min*1.5;
-
-UPDATE creature_template SET creature_template.mingold = @Gold_10_Trash_min, creature_template.maxgold = @Gold_10_Trash_max 
-WHERE
-entry IN (SELECT `id` FROM `creature` WHERE `map`=603) AND    -- Ulduar Map
-faction_A IN (14,16) AND
-faction_H IN (14,16) AND
-rank=1 AND
-entry NOT IN (34234,33236,34164,34164,32872); 
-
-
-UPDATE creature_template INNER JOIN creature_template creat ON creature_template.entry = creat.difficulty_entry_1
-SET creature_template.mingold = @Gold_25_Trash_min, creature_template.maxgold = @Gold_25_Trash_max 
-WHERE
-creat.entry IN (SELECT `id` FROM `creature` WHERE `map`=603) AND    -- Ulduar Map
-creat.faction_A IN (14,16) AND
-creat.faction_H IN (14,16) AND
-creat.rank=1 AND
-creat.entry NOT IN (34234,33236,34164,34164,32872);
-
-
-
-
+-- SAI
 -- ------------------
 -- Flame Leviathane |
 -- ------------------
@@ -1694,3 +1667,29 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (33838,0,0,0,54,0,100,0,0,0,0,0,29,0,360,0,0,0,0,23,0,0,0,0,0,0,0, 'Enslaved Fire Elemental - on Summon - Follow Owner or Summoner'),
 (33838,0,1,0,0,0,100,0,4000,8000,12000,14000,11,38064,0,0,0,0,0,0,0,0,0,0,0,0,0, 'Enslaved Fire Elemental - Cast Blast Wave'),
 (33838,0,2,0,4,0,100,0,0,0,0,0,11,63778,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Enslaved Fire Elemental - Cast Fire Shield on aggro');
+
+
+
+-- Fix Gold Loot of Ulduar
+SET @Gold_10_Trash_min  :=100000;
+SET @Gold_10_Trash_max  :=@Gold_10_Trash_min*1.5;
+SET @Gold_25_Trash_min  :=250000;
+SET @Gold_25_Trash_max  :=@Gold_25_Trash_min*1.5;
+
+UPDATE creature_template SET creature_template.mingold = @Gold_10_Trash_min, creature_template.maxgold = @Gold_10_Trash_max 
+WHERE
+entry IN (SELECT `id` FROM `creature` WHERE `map`=603) AND    -- Ulduar Map
+faction_A IN (14,16) AND
+faction_H IN (14,16) AND
+rank=1 AND
+entry NOT IN (34234,33236,34164,34164,32872); 
+
+
+UPDATE creature_template INNER JOIN creature_template creat ON creature_template.entry = creat.difficulty_entry_1
+SET creature_template.mingold = @Gold_25_Trash_min, creature_template.maxgold = @Gold_25_Trash_max 
+WHERE
+creat.entry IN (SELECT `id` FROM `creature` WHERE `map`=603) AND    -- Ulduar Map
+creat.faction_A IN (14,16) AND
+creat.faction_H IN (14,16) AND
+creat.rank=1 AND
+creat.entry NOT IN (34234,33236,34164,34164,32872);
