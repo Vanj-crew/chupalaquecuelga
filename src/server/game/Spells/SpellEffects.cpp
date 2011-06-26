@@ -1490,22 +1490,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             }
             switch (m_spellInfo->Id)
             {
-            case 49560: // Death Grip http://es.wowhead.com/spell=49576
+            case 49560: // Death Grip
                 Position pos;
                 GetSummonPosition(effIndex, pos);
-                /* Esta spell no debe afectar a los vehiculos 
-                   Codigo original
                 if (Unit *unit = unitTarget->GetVehicleBase()) // what is this for?
                     unit->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
                 else if (!unitTarget->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
-                    unitTarget->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
-                return;*/
-                  //Codigo modificado
-               if (Unit *unit = unitTarget->GetVehicleBase()) // 
-		     return;
-	       else
-                    unit->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
-                if (!unitTarget->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
                     unitTarget->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
                 return;
             case 46584: // Raise Dead
