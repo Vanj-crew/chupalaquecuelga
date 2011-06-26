@@ -6857,6 +6857,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
                     break;
                 }
+
                 // Glyph of Divinity
                 case 54939:
                 {
